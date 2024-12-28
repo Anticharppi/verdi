@@ -40,7 +40,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 text-white">
+    <div className="relative min-h-screen bg-gray-900 text-white">
       <NavigationBar />
 
       <main className="relative">

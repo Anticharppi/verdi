@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 interface Feature {
   icon: React.ReactNode;
@@ -14,7 +14,7 @@ export default function FeaturesGrid({ features }: FeaturesGridProps) {
   return (
     <section className="py-20">
       <div className="container mx-auto px-6">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -25,7 +25,9 @@ export default function FeaturesGrid({ features }: FeaturesGridProps) {
               Nuestras Soluciones
             </span>
           </h2>
-          <p className="text-gray-300">Herramientas especializadas para tu empresa</p>
+          <p className="text-gray-300">
+            Herramientas especializadas para tu empresa
+          </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -35,7 +37,7 @@ export default function FeaturesGrid({ features }: FeaturesGridProps) {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.2 }}
-              className="p-8 rounded-2xl backdrop-blur-md bg-white/5 hover:bg-white/10 transition-all border border-white/10 hover:border-emerald-500/30"
+              className="p-8 rounded-2xl backdrop-blur-md bg-gray-800/50 hover:bg-gray-800/80 transition-all border border-white/10 hover:border-emerald-500/30"
             >
               <div className="p-3 w-fit rounded-xl bg-emerald-500/10 mb-6">
                 {feature.icon}

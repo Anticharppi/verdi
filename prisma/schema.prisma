@@ -28,6 +28,11 @@ model City {
   @@map("cities")
 }
 
+enum CompanyStatus {
+  ACTIVE
+  INACTIVE
+}
+
 model Company {
   id                        String                      @id @default(cuid())
   superServicesId           String                      @unique @map("super_services_id")
@@ -40,7 +45,7 @@ model Company {
   emailConfirmed            Boolean                     @default(false) @map("email_confirmed")
   phoneNumberConfirmed      Boolean                     @default(false) @map("phone_number_confirmed")
   createdAt                 DateTime                    @default(now()) @map("created_at")
-  status                    String
+  status                    CompanyStatus               @default(INACTIVE)
   providers                 Provider[]
   vehicles                  Vehicle[]
   routes                    Route[]
@@ -55,7 +60,7 @@ model Company {
   macroRoutesNuecas         MacroRouteNueca[]
   providerRoutes            ProviderRoute[]
   rejectionDestinationSites RejectionDestinationSites[]
-  kindeUsers                KindeUser[]
+  companyUsers              CompanyUser[]
 
   @@map("companies")
 }
@@ -116,18 +121,37 @@ model Nuap {
   @@map("nuap")
 }
 
-model KindeUser {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  firstName String?  @map("first_name")
-  lastName  String?  @map("last_name")
-  companyId String   @map("company_id")
-  roles     String[]
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  company   Company  @relation(fields: [companyId], references: [id])
+model User {
+  id           String        @id
+  email        String        @unique
+  firstName    String?
+  lastName     String?
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  isAdmin      Boolean       @default(false) @map("is_admin")
+  companyUsers CompanyUser[]
 
-  @@map("kinde_users")
+  @@map("users")
+}
+
+enum CompanyRole {
+  ADMIN
+  MANAGER
+  OPERATOR
+}
+
+model CompanyUser {
+  id        String      @id @default(cuid())
+  userId    String      @map("user_id")
+  companyId String      @map("company_id")
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  role      CompanyRole @default(OPERATOR)
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company   Company     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, companyId])
+  @@map("company_users")
 }
 
 model Provider {

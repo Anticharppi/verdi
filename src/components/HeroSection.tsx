@@ -1,8 +1,11 @@
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 export default function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center">
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 via-transparent to-transparent opacity-20" />
+      </div>
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -17,11 +20,11 @@ export default function HeroSection() {
             </span>
           </h1>
           <p className="text-xl text-gray-300 mb-12">
-            Centraliza y automatiza tus procesos de cumplimiento normativo 
-            con nuestra solución especializada para empresas de servicios públicos.
+            Centraliza y automatiza tus procesos de cumplimiento normativo con
+            nuestra solución especializada para empresas de servicios públicos.
           </p>
           <div className="flex flex-wrap gap-4">
-            <a 
+            <a
               href="/registro"
               className="px-8 py-4 bg-emerald-500 rounded-lg font-medium hover:bg-emerald-600 transition-all"
             >
