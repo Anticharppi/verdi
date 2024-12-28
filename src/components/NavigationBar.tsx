@@ -1,4 +1,7 @@
-import Link from "next/link";
+import {
+  RegisterLink,
+  LoginLink,
+} from "@kinde-oss/kinde-auth-nextjs/components";
 
 export default function NavigationBar() {
   return (
@@ -19,15 +22,12 @@ export default function NavigationBar() {
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="px-4 py-2 hover:text-emerald-300 transition-colors">
+            <LoginLink className="px-4 py-2 hover:text-emerald-300 transition-colors">
               Iniciar Sesión
-            </button>
-            <Link
-              href={"/register"}
-              className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-lg font-medium transition-all"
-            >
+            </LoginLink>
+            <RegisterLink className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-lg font-medium transition-all">
               Registro
-            </Link>
+            </RegisterLink>
           </div>
         </div>
       </div>

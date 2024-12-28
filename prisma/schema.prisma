@@ -1,0 +1,387 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model State {
+  id            String         @id @default(cuid())
+  code          String         @unique
+  name          String
+  cities        City[]
+  companyStates CompanyState[]
+
+  @@map("states")
+}
+
+model City {
+  id          String        @id @default(cuid())
+  name        String
+  code        String
+  stateCode   String        @map("state_code")
+  state       State         @relation(fields: [stateCode], references: [code])
+  companyCity CompanyCity[]
+
+  @@map("cities")
+}
+
+model Company {
+  id                        String                      @id @default(cuid())
+  superServicesId           String                      @unique @map("super_services_id")
+  businessName              String                      @map("business_name")
+  nit                       String                      @unique
+  email                     String                      @unique
+  phoneNumber               String                      @unique @map("phone_number")
+  imageUrl                  String?                     @map("image_url")
+  address                   String
+  emailConfirmed            Boolean                     @default(false) @map("email_confirmed")
+  phoneNumberConfirmed      Boolean                     @default(false) @map("phone_number_confirmed")
+  createdAt                 DateTime                    @default(now()) @map("created_at")
+  status                    String
+  providers                 Provider[]
+  vehicles                  Vehicle[]
+  routes                    Route[]
+  nuecas                    Nueca[]
+  nuaps                     Nuap[]
+  companyStates             CompanyState[]
+  companyCities             CompanyCity[]
+  materials                 Material[]
+  materialsIntake           MaterialsIntake[]
+  materialsIntakeItems      MaterialsIntakeItem[]
+  macroRoutes               MacroRoute[]
+  macroRoutesNuecas         MacroRouteNueca[]
+  providerRoutes            ProviderRoute[]
+  rejectionDestinationSites RejectionDestinationSites[]
+  kindeUsers                KindeUser[]
+
+  @@map("companies")
+}
+
+model CompanyState {
+  id          String        @id @default(cuid())
+  stateCode   String        @map("state_code")
+  companyId   String        @map("company_id")
+  state       State         @relation(fields: [stateCode], references: [code])
+  company     Company       @relation(fields: [companyId], references: [id])
+  companyCity CompanyCity[]
+
+  @@map("companies_states")
+}
+
+model CompanyCity {
+  id             String       @id @default(cuid())
+  cityId         String       @map("city_id")
+  companyStateId String       @map("company_state_id")
+  companyId      String       @map("company_id")
+  city           City         @relation(fields: [cityId], references: [id])
+  company        Company      @relation(fields: [companyId], references: [id])
+  companyCity    CompanyState @relation(fields: [companyStateId], references: [id])
+  nuecas         Nueca[]
+  nuaps          Nuap[]
+
+  @@map("companies_cities")
+}
+
+model Nueca {
+  id                        String                      @id @default(cuid())
+  code                      String
+  companyId                 String                      @map("company_id")
+  companyCityId             String                      @map("company_city_id")
+  nuapId                    String                      @map("nuap_id")
+  price                     Float
+  nuap                      Nuap                        @relation(fields: [nuapId], references: [id])
+  companyCity               CompanyCity                 @relation(fields: [companyCityId], references: [id])
+  company                   Company                     @relation(fields: [companyId], references: [id])
+  macroRouteNuecas          MacroRouteNueca[]
+  materials                 Material[]
+  rejectionDestinationSites RejectionDestinationSites[]
+  WeighingMachine           WeighingMachine[]
+  providers                 Provider[]
+
+  @@map("nuecas")
+}
+
+model Nuap {
+  id            String      @id @default(cuid())
+  code          String
+  companyId     String      @map("company_id")
+  companyCityId String      @map("company_city_id")
+  company       Company     @relation(fields: [companyId], references: [id])
+  companyCity   CompanyCity @relation(fields: [companyCityId], references: [id])
+  nuecas        Nueca[]
+
+  @@map("nuap")
+}
+
+model KindeUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  firstName String?  @map("first_name")
+  lastName  String?  @map("last_name")
+  companyId String   @map("company_id")
+  roles     String[]
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  company   Company  @relation(fields: [companyId], references: [id])
+
+  @@map("kinde_users")
+}
+
+model Provider {
+  id             String          @id @default(cuid())
+  names          String
+  lastNames      String          @map("last_names")
+  dni            String
+  dniType        String          @map("dni_type")
+  birthDate      DateTime        @map("birth_date")
+  imageUrl       String?         @map("image_url")
+  phone          String?
+  email          String?
+  address        String?
+  type           String
+  companyId      String          @map("company_id")
+  workingDay     String          @map("working_day")
+  workingWeekDay String          @map("working_week_day")
+  nuecaId        String          @map("nueca_id")
+  company        Company         @relation(fields: [companyId], references: [id])
+  vehicles       Vehicle[]
+  providerRoutes ProviderRoute[]
+  nueca          Nueca           @relation(fields: [nuecaId], references: [id])
+
+  @@map("providers")
+}
+
+model ProviderRoute {
+  id               String            @id @default(cuid())
+  providerId       String            @map("provider_id")
+  routeId          String            @map("route_id")
+  companyId        String            @map("company_id")
+  company          Company           @relation(fields: [companyId], references: [id])
+  route            Route             @relation(fields: [routeId], references: [id])
+  provider         Provider          @relation(fields: [providerId], references: [id])
+  materialsIntakes MaterialsIntake[]
+
+  @@map("provider_route")
+}
+
+model Vehicle {
+  id                 String            @id @default(cuid())
+  type               VehiclesTypes     @default(OTRO)
+  licensePlate       String?           @map("license_plate")
+  volumeCapacity     Float             @map("volume_capacity")
+  weightCapacity     Float             @map("weight_capacity")
+  axesAmount         Int?              @map("axes_amount")
+  registrationDate   DateTime?         @map("registration_date")
+  entryOperationDate DateTime          @map("entry_operation_date")
+  provider           Provider          @relation(fields: [providerId], references: [id])
+  company            Company           @relation(fields: [companyId], references: [id])
+  providerId         String            @map("provider_id")
+  companyId          String            @map("company_id")
+  brand              String?
+  materialsIntakes   MaterialsIntake[]
+
+  @@map("vehicles")
+}
+
+model Route {
+  id                      String          @id @default(cuid())
+  name                    String
+  code                    String
+  type                    RouteTypes
+  entryOperationDate      DateTime        @map("entry_operation_date") @db.Date
+  startAddress            String          @map("start_address")
+  startTime               String          @map("start_time")
+  endAddress              String          @map("end_address")
+  endTime                 String          @map("end_time")
+  distanceOnPavedRoute    Float           @map("distance_on_paved_route")
+  distanceOnNotPavedRoute Float           @map("distance_on_not_paved_route")
+  weeklyFrequency         Int             @map("weekly_frequency")
+  frequency               String
+  endsOnTransferStation   Boolean         @map("ends_on_transfer_station")
+  transferStationCode     String?         @map("transfer_station_code")
+  macroRouteId            String          @map("macro_route_id")
+  companyId               String          @map("company_id")
+  company                 Company         @relation(fields: [companyId], references: [id])
+  macroRoute              MacroRoute      @relation(fields: [macroRouteId], references: [id])
+  providerRoutes          ProviderRoute[]
+
+  @@map("routes")
+}
+
+model Material {
+  id                 String                @id @default(cuid())
+  name               String
+  code               String
+  price              Int
+  companyId          String                @map("company_id")
+  baseMaterialId     String                @map("base_material_id")
+  nuecaId            String                @map("nueca_id")
+  company            Company               @relation(fields: [companyId], references: [id])
+  baseMaterial       BaseMaterial          @relation(fields: [baseMaterialId], references: [id])
+  materialsIntakeRow MaterialsIntakeItem[]
+  nueca              Nueca                 @relation(fields: [nuecaId], references: [id])
+
+  @@map("materials")
+}
+
+model MaterialsIntake {
+  id                         String                    @id @default(cuid())
+  total                      Float
+  subtotal                   Float
+  totalFee                   Float                     @default(0) @map("total_fee")
+  fixedFee                   Float                     @map("fixed_fee")
+  weekCode                   Int                       @map("week_code")
+  companyId                  String                    @map("company_id")
+  providerRouteId            String                    @map("provider_route_id")
+  rejectionDestinationSiteId String                    @map("rejection_destination_site_id")
+  closed                     Boolean                   @default(false)
+  createdAt                  String                    @map("created_at")
+  vehicleId                  String?                   @map("vehicle_id")
+  company                    Company                   @relation(fields: [companyId], references: [id])
+  materialsIntakeItems       MaterialsIntakeItem[]
+  providerRoute              ProviderRoute             @relation(fields: [providerRouteId], references: [id])
+  vehicle                    Vehicle?                  @relation(fields: [vehicleId], references: [id])
+  rejectionDestinationSite   RejectionDestinationSites @relation(fields: [rejectionDestinationSiteId], references: [id])
+
+  @@map("materials_intake")
+}
+
+model MaterialsIntakeItem {
+  id                        String          @id @default(cuid())
+  price                     Int
+  total                     Float
+  materialId                String          @map("material_id")
+  amountDeliveredByProvider Float           @map("amount_delivered_by_provider")
+  materialsIntakeId         String          @map("materials_intake_id")
+  companyId                 String          @map("company_id")
+  admittedAmount            Float           @map("admitted_amount")
+  appliesFee                Boolean         @default(true) @map("applies_fee")
+  rejectReason              String?         @map("reject_reason")
+  rejectedAmount            Float?          @map("rejected_amount")
+  company                   Company         @relation(fields: [companyId], references: [id])
+  materialsIntake           MaterialsIntake @relation(fields: [materialsIntakeId], references: [id])
+  material                  Material        @relation(fields: [materialId], references: [id])
+
+  @@map("materials_intake_item")
+}
+
+model MacroRoute {
+  id               String            @id @default(cuid())
+  code             String
+  name             String
+  companyId        String            @map("company_id")
+  company          Company           @relation(fields: [companyId], references: [id])
+  routes           Route[]
+  macroRoutesNueca MacroRouteNueca[]
+
+  @@map("macro_routes")
+}
+
+model MacroRouteNueca {
+  id           String     @id @default(cuid())
+  companyId    String     @map("company_id")
+  macroRouteId String     @map("macro_route_id")
+  nuecaId      String     @map("nueca_id")
+  nueca        Nueca      @relation(fields: [nuecaId], references: [id])
+  macroRoute   MacroRoute @relation(fields: [macroRouteId], references: [id])
+  company      Company    @relation(fields: [companyId], references: [id])
+
+  @@map("macro_route_nuecas")
+}
+
+model BaseMaterial {
+  id        String     @id @default(cuid())
+  code      String
+  name      String
+  materials Material[]
+
+  @@map("base_materials")
+}
+
+model RejectionDestinationSites {
+  id                            String                        @id @default(cuid())
+  companyId                     String                        @map("company_id")
+  nuecaId                       String                        @map("nueca_id")
+  code                          String
+  destinationTypeId             String                        @map("destination_type_id")
+  transferStationCode           String?                       @map("transfer_station_code")
+  rejectionDestinationCompanyId String                        @map("rejection_destination_company_id")
+  company                       Company                       @relation(fields: [companyId], references: [id])
+  nueca                         Nueca                         @relation(fields: [nuecaId], references: [id])
+  destinationType               DestinationTypes              @relation(fields: [destinationTypeId], references: [id])
+  materialsIntake               MaterialsIntake[]
+  rejectionDestinationCompany   RejectionDestinationCompanies @relation(fields: [rejectionDestinationCompanyId], references: [id])
+
+  @@map("rejection_destination_sites")
+}
+
+model DestinationTypes {
+  id                        String                      @id @default(cuid())
+  name                      String
+  code                      Int
+  rejectionDestinationSites RejectionDestinationSites[]
+
+  @@map("destination_types")
+}
+
+model RejectionDestinationCompanies {
+  id                        String                      @id @default(cuid())
+  name                      String
+  companyId                 Int                         @map("company_id")
+  address                   String
+  rnaId                     String                      @map("rna_id")
+  nit                       String
+  phone                     String
+  rejectionDestinationSites RejectionDestinationSites[]
+
+  @@map("rejection_destination_companies")
+}
+
+model WeighingMachine {
+  id                         String                    @id @default(cuid())
+  companyId                  Int                       @map("company_id")
+  siteType                   WeighingMachinesSiteTypes @default(ESTACION_DE_CLASIFICACION_Y_APROVECHAMIENTO_NUECA) @map("site_type")
+  nueca                      Nueca                     @relation(fields: [nuecaId], references: [id])
+  nuecaCode                  String                    @map("nueca_code")
+  scaleOnSite                Int                       @map("scale_on_site")
+  nuecaId                    String                    @map("nueca_id")
+  weighingMachineId          String                    @map("weighing_machine_id")
+  isEnabled                  Boolean                   @default(true) @map("is_enabled")
+  weightCapacity             Float                     @map("weight_capacity")
+  installationDate           String                    @map("installation_date")
+  lastRepairDate             String                    @map("last_repair_date")
+  lastCalibrationDate        String                    @map("last_calibration_date")
+  lastCalibrationCompanyName String                    @map("last_calibration_company_name")
+
+  @@map("weighing_machines")
+}
+
+enum VehiclesTypes {
+  VOLQUETA
+  COMPACTADOR
+  TRACTO_CAMION
+  CAMIONETA
+  VEHICULO_TRACCION_HUMANA
+  OTRO
+}
+
+enum WeighingMachinesSiteTypes {
+  SITIO_DE_DISPOSICION_FINAL_NUSD
+  ESTACION_DE_TRANSFERENCIA_NUET
+  ESTACION_DE_CLASIFICACION_Y_APROVECHAMIENTO_NUECA
+}
+
+enum RouteTypes {
+  RECOLECCION_RESUDUOS_NO_APROVECHABLES
+  BARRIDO_LIMPIEZA_VIAS_AREAS_PUBLICAS
+  LIMPIEZA_PLAYAS
+  CORTE_CESPED
+  PODA_ARBOLES
+  RECOLECCION_RESIDUOS_APROVECHABLES
+  RECOLECCION_RESIDUOS_NO_APROVECHABLES
+  RECOLECCION_RESIDUOS_PROVENIENTES_BARRIDO_LIMPIEZA_VIAS_AREAS_PUBLICAS
+  RECOLECCION_RESIDUOS_PROVENIENTES_PODA_CESPED_ARBOLES
+}
