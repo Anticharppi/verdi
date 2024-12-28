@@ -3,12 +3,12 @@
 import { motion } from "framer-motion";
 import { FileText, Shield, ChartBar } from "lucide-react";
 import { useEffect, useState } from "react";
-import ComplianceSection from "@/src/components/ComplianceSection";
-import FeaturesGrid from "@/src/components/FeaturesGrid";
-import Footer from "@/src/components/Footer";
-import HeroSection from "@/src/components/HeroSection";
-import NavigationBar from "@/src/components/NavigationBar";
-import ResolutionsSection from "@/src/components/ResolutionsSection";
+import ComplianceSection from "@/components/ComplianceSection";
+import FeaturesGrid from "@/components/FeaturesGrid";
+import Footer from "@/components/Footer";
+import HeroSection from "@/components/HeroSection";
+import NavigationBar from "@/components/NavigationBar";
+import ResolutionsSection from "@/components/ResolutionsSection";
 
 const features = [
   {

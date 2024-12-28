@@ -18,6 +18,7 @@
   - `/components`: Componentes de React
     - `/forms`: Formularios de la aplicación
       - `/company`: Componentes modulares para el formulario de empresas
+  - `/contexts`: Contextos globales de la aplicación
   - `/lib`: Utilidades y tipos
     - `/mocks`: Datos mock para desarrollo
     - `/types`: Definiciones de tipos TypeScript
@@ -25,12 +26,20 @@
 - `/public`: Archivos estáticos
 - `/.next`: Directorio de construcción de Next.js
 
+## Estado Global
+### Contexto de Empresa
+- Gestión del estado de empresa seleccionada
+- Accesible en todo el dashboard
+- Implementado con React Context
+- Hook personalizado `useCompany` para fácil acceso
+
 ## Funcionalidades Implementadas
 - Formulario de empresas con:
   - Información básica
   - Información de contacto
   - Gestión de ciudades de operación
   - Selección de departamentos y ciudades
+- Selección y persistencia de empresa activa en el dashboard
 
 ## Archivos de Configuración
 - `next.config.ts`: Configuración de Next.js
