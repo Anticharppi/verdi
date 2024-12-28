@@ -1,48 +1,30 @@
-# Project Context
+# Contexto de Desarrollo
 
-## Project Overview
-- Name: Verdi
-- Version: 0.1.0
-- Type: Next.js Application
-- Status: In Development
+## Stack Tecnológico
+- Next.js
+- TypeScript
+- TailwindCSS
+- Prisma (ORM)
 
-## Tech Stack
-- Frontend Framework: Next.js 15.1.3
-- React Version: 19.0.0
-- TypeScript: ^5
-- Styling: TailwindCSS 3.4.1
-- Authentication: Kinde Auth (@kinde-oss/kinde-auth-nextjs)
-- Database ORM: Prisma 6.1.0
-- UI Libraries:
-  - Framer Motion (animations)
-  - Lucide React (icons)
-  - clsx & tailwind-merge (utility classes)
+## Estructura del Proyecto
+- Proyecto base de Next.js con configuración TypeScript
+- Utiliza sistema de módulos ES
+- Configuración de PostCSS presente
+- ESLint configurado
+- Sistema de control de versiones Git implementado
 
-## Project Structure
-```
-verdi/
-├── src/
-│   ├── app/         # Next.js application routes
-│   ├── components/  # Reusable React components
-│   └── lib/         # Utility functions and shared code
-├── prisma/          # Database schema and migrations
-├── public/          # Static assets
-└── config files     # Various configuration files
-```
+## Directorios Principales
+- `/src`: Código fuente principal
+- `/prisma`: Configuración y modelos de Prisma
+- `/public`: Archivos estáticos
+- `/.next`: Directorio de construcción de Next.js
 
-## Build Tools
-- Package Manager: npm
-- Development Server: Next.js with Turbopack
-- Linting: ESLint
-- Type Checking: TypeScript
+## Archivos de Configuración
+- `next.config.ts`: Configuración de Next.js
+- `tailwind.config.ts`: Configuración de TailwindCSS
+- `tsconfig.json`: Configuración de TypeScript
+- `postcss.config.mjs`: Configuración de PostCSS
+- `eslint.config.mjs`: Configuración de ESLint
 
-## Development Guidelines
-1. TypeScript is mandatory for all new code
-2. Use TailwindCSS for styling
-3. Follow Next.js 13+ App Router conventions
-4. Implement proper error handling and loading states
-5. Maintain type safety across the application
-
-## Authentication
-- Using Kinde Auth for authentication
-- Implementation should follow Kinde Auth Next.js best practices
+## Variables de Entorno
+- Archivo `.env` presente en la raíz del proyecto

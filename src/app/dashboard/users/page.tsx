@@ -1,7 +1,9 @@
 "use client";
 
-import { Plus, Search, MoreHorizontal, Pencil, Trash2, User as UserIcon, Building2, ChevronDown } from "lucide-react";
+import { Plus, Search, Building2, ChevronDown, UserIcon } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface User {
   id: string;
@@ -16,7 +18,7 @@ interface CompanyUser {
   id: string;
   userId: string;
   companyId: string;
-  companyName: string; // Agregado para mostrar el nombre de la empresa
+  companyName: string;
   role: 'admin' | 'manager' | 'operator';
   createdAt: string;
   updatedAt: string;
@@ -28,6 +30,7 @@ interface Company {
 }
 
 export default function UsersPage() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCompany, setSelectedCompany] = useState<string>("");
 
@@ -94,10 +97,12 @@ export default function UsersPage() {
           </div>
         </div>
 
-        <button className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+        <Link 
+          href="/dashboard/users/new"
+          className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
           <Plus className="w-5 h-5" />
           <span>Agregar Usuario</span>
-        </button>
+        </Link>
       </div>
 
       {/* Users Table */}
@@ -123,14 +128,15 @@ export default function UsersPage() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Fecha de registro
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Acciones
-              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredUsers.map((user) => (
-              <tr key={user.id} className="hover:bg-gray-50">
+              <tr 
+                key={user.id} 
+                className="hover:bg-gray-50 cursor-pointer"
+                onClick={() => router.push(`/dashboard/users/${user.id}`)}
+              >
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="h-10 w-10 rounded-full bg-emerald-100 flex items-center justify-center">
@@ -180,28 +186,6 @@ export default function UsersPage() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {new Date(user.companies[0]?.createdAt || "").toLocaleDateString()}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <div className="flex items-center justify-end gap-2">
-                    <button 
-                      className="p-2 text-gray-400 hover:text-emerald-500 transition-colors"
-                      title="Editar"
-                    >
-                      <Pencil className="w-5 h-5" />
-                    </button>
-                    <button 
-                      className="p-2 text-gray-400 hover:text-red-500 transition-colors"
-                      title="Eliminar"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                    <button 
-                      className="p-2 text-gray-400 hover:text-gray-500 transition-colors"
-                      title="Más opciones"
-                    >
-                      <MoreHorizontal className="w-5 h-5" />
-                    </button>
-                  </div>
                 </td>
               </tr>
             ))}
