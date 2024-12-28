@@ -1,4 +1,4 @@
-import { SidebarNav } from "@/src/components/SidebarNav";
+import { SidebarNav } from "@/components/SidebarNav";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/server";
 import { LogOut } from "lucide-react";
 
