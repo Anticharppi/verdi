@@ -1,6 +1,6 @@
 import { Building2, Truck, Route, Users, ArrowUpRight } from "lucide-react";
-import { UserWelcome } from "@/src/components/dashboard/UserWelcome";
-import { StatsCard } from "@/src/components/dashboard/StatsCard";
+import { UserWelcome } from "@/components/dashboard/UserWelcome";
+import { StatsCard } from "@/components/dashboard/StatsCard";
 
 export default async function DashboardPage() {
   const stats = [
