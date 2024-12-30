@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Vehicle } from "../types";
 import { VehicleStatus } from "./vehicle-status";
+import { VehicleTypeIcon } from "./vehicle-type-icon";
 import { formatDate } from "@/lib/utils";
 
 interface VehiclesTableProps {
@@ -18,19 +19,13 @@ export function VehiclesTable({ vehicles }: VehiclesTableProps) {
         <thead className="bg-gray-50">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Tipo
+              Vehículo
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Placa
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Marca
-            </th>
             <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Cap. Volumen
-            </th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Cap. Peso
+              Capacidades
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Proveedor
@@ -39,7 +34,7 @@ export function VehiclesTable({ vehicles }: VehiclesTableProps) {
               Estado
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Fecha Registro
+              Fecha de registro
             </th>
           </tr>
         </thead>
@@ -47,7 +42,7 @@ export function VehiclesTable({ vehicles }: VehiclesTableProps) {
           {vehicles.length === 0 ? (
             <tr>
               <td 
-                colSpan={8} 
+                colSpan={6} 
                 className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center"
               >
                 No se encontraron vehículos
@@ -61,21 +56,32 @@ export function VehiclesTable({ vehicles }: VehiclesTableProps) {
                 onClick={() => router.push(`/dashboard/vehicles/${vehicle.id}`)}
               >
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
-                    {formatVehicleType(vehicle.type)}
+                  <div className="flex items-center">
+                    <VehicleTypeIcon type={vehicle.type} />
+                    <div className="ml-4">
+                      <div className="text-sm font-medium text-gray-900">
+                        {formatVehicleType(vehicle.type)}
+                      </div>
+                      {vehicle.brand && (
+                        <div className="text-sm text-gray-500">
+                          {vehicle.brand}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{vehicle.licensePlate}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{vehicle.brand || "-"}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right">
-                  <div className="text-sm text-gray-900">{vehicle.volumeCapacity} m³</div>
+                  <div className="text-sm font-medium text-gray-900">
+                    {vehicle.licensePlate}
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right">
-                  <div className="text-sm text-gray-900">{vehicle.weightCapacity} kg</div>
+                  <div className="text-sm text-gray-900">
+                    {vehicle.volumeCapacity} m³
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {vehicle.weightCapacity} kg
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900">{vehicle.provider.names}</div>
@@ -84,8 +90,10 @@ export function VehiclesTable({ vehicles }: VehiclesTableProps) {
                 <td className="px-6 py-4 whitespace-nowrap">
                   <VehicleStatus status={vehicle.status} />
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {formatDate(vehicle.registrationDate)}
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-500">
+                    {formatDate(vehicle.registrationDate)}
+                  </div>
                 </td>
               </tr>
             ))
