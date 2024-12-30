@@ -12,7 +12,8 @@ import {
   ChevronDown,
   Factory,
   ScrollText,
-  UsersRound
+  UsersRound,
+  Map
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -39,6 +40,11 @@ export function SidebarNav() {
       label: "Estacion de clasificacion de aprovechamiento",
       href: "/dashboard/classification-stations",
       icon: <Factory className="w-4 h-4" />,
+    },
+    {
+      label: "Macro Rutas",
+      href: "/dashboard/macro-routes",
+      icon: <Map className="w-4 h-4" />,
     },
     {
       label: "Rutas",
