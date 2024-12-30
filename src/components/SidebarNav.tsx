@@ -12,6 +12,7 @@ import {
   ChevronDown,
   Factory,
   ScrollText,
+  UsersRound
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -48,6 +49,11 @@ export function SidebarNav() {
       label: "Vehículos",
       href: "/dashboard/vehicles",
       icon: <Truck className="w-4 h-4" />,
+    },
+    {
+      label: "Proveedores",
+      href: "/dashboard/providers",
+      icon: <UsersRound className="w-4 h-4" />,
     },
     {
       label: "Reportes",
