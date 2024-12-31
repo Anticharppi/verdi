@@ -13,7 +13,8 @@ import {
   Factory,
   ScrollText,
   UsersRound,
-  Map
+  Map,
+  PackageCheck
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -52,6 +53,11 @@ export function SidebarNav() {
       icon: <Route className="w-4 h-4" />,
     },
     {
+      label: "Recepción de Materiales",
+      href: "/dashboard/materials-intake",
+      icon: <PackageCheck className="w-4 h-4" />,
+    },
+    {
       label: "Vehículos",
       href: "/dashboard/vehicles",
       icon: <Truck className="w-4 h-4" />,
@@ -70,12 +76,10 @@ export function SidebarNav() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-8.5rem)] w-full">
-      {/* Selector de empresa */}
       <div className="p-4 border-b border-white/10">
         <CompanySelector />
       </div>
 
-      {/* Navegación principal */}
       <div className="flex-1 overflow-y-auto">
         <nav className="p-4 space-y-2">
           {mainNavigation.map((item) => (
@@ -90,7 +94,6 @@ export function SidebarNav() {
         </nav>
       </div>
 
-      {/* Grupo de ajustes en la parte inferior */}
       <div className="p-4 border-t border-white/10">
         <div>
           <button

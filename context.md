@@ -1,7 +1,8 @@
 # Project Context
 
 ## Project Overview
-- Next.js 15.1.3
+- Next.js 15
+- React 19
 - Turbopack
 - TypeScript
 - shadcn/ui components
@@ -25,6 +26,16 @@
   - Shadows: shadow
   - Focus rings: ring-2 ring-emerald-500
 
+## UI Guidelines
+- All text in Spanish
+- Custom error messages for forms
+- Consistent spacing between sections
+- Loading states for data fetching
+- Mobile-first responsive design
+- Accessible focus states
+- Form validation with visual feedback
+- Toast notifications for actions
+
 ## Components
 - DataTable: Reusable table component with sorting, filtering, and pagination
   - Location: src/components/ui/data-table.tsx
@@ -32,19 +43,22 @@
   - Styling: Matches dashboard/companies design system
 
 ## Architecture
-- Following Next.js 13+ app directory structure
+- Next.js app directory structure
 - Client components marked with "use client"
-- UI components organized in src/components/ui/
+- UI components in src/components/ui/
+- Page layouts in src/app/(dashboard)/layout.tsx
 
 ## Stack Details
-- Next.js
-- TypeScript
+- Next.js 15
+- React 19
+- TypeScript 5
 - shadcn/ui
-- TanStack Table
+- TanStack Table v8
 - Lucide Icons
+- Tailwind CSS
+- Prisma ORM
 
 ## Notes
-- DataTable component is set up to handle generic data types (TData, TValue)
-- Includes built-in search functionality with customizable placeholder
-- Implements pagination, sorting, and filtering features
-- All text is in Spanish for consistency
+- DataTable handles generic data types (TData, TValue)
+- Search functionality with customizable placeholder
+- Pagination, sorting, and filtering features
