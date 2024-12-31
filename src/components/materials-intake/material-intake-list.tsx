@@ -78,7 +78,6 @@ const columns: ColumnDef<MaterialIntake>[] = [
 export function MaterialIntakeList() {
   const router = useRouter();
 
-  // Mock data - to be replaced with real data
   const data: MaterialIntake[] = [
     {
       id: "1",
@@ -93,7 +92,6 @@ export function MaterialIntakeList() {
       routeName: "Ruta Norte",
       vehiclePlate: "ABC123",
     },
-    // Add more mock data...
   ];
 
   return (
@@ -102,7 +100,7 @@ export function MaterialIntakeList() {
         columns={columns}
         data={data}
         searchPlaceholder="Buscar por proveedor o ruta..."
-        onRowClick={(row) => router.push(`/materials-intake/${row.id}`)}
+        onRowClick={(row) => router.push(`/dashboard/materials-intake/${row.id}`)}
       />
     </div>
   );

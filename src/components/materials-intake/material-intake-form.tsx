@@ -1,214 +1,93 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import * as z from "zod";
+import { Form } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { HeaderSection } from "./form-sections/header-section";
+import { GeneralInfoSection } from "./form-sections/general-info-section";
+import { MaterialsTableSection } from "./form-sections/materials-table-section";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const formSchema = z.object({
-  providerId: z.string({
-    required_error: "Selecciona un proveedor",
+  generalInfo: z.object({
+    providerId: z.string().min(1, "Selecciona un proveedor"),
+    routeId: z.string().min(1, "Selecciona una ruta"),
+    vehicleId: z.string().optional(),
+    weekCode: z.coerce.number().min(1).max(53),
+    rejectionSiteId: z.string().min(1, "Selecciona un sitio de rechazo"),
+    fixedFee: z.coerce.number().min(0),
   }),
-  routeId: z.string({
-    required_error: "Selecciona una ruta",
-  }),
-  vehicleId: z.string().optional(),
-  fixedFee: z.coerce.number().min(0, {
-    message: "La tarifa fija debe ser mayor o igual a 0",
-  }),
-  rejectionSiteId: z.string({
-    required_error: "Selecciona un sitio de rechazo",
-  }),
-  weekCode: z.coerce.number().min(1).max(53, {
-    message: "El código de semana debe estar entre 1 y 53",
-  }),
+  materials: z.array(z.object({
+    materialId: z.string().min(1, "Selecciona un material"),
+    amountDelivered: z.coerce.number().min(0),
+    admittedAmount: z.coerce.number().min(0),
+    price: z.coerce.number().min(0),
+    appliesFee: z.boolean().default(true),
+    rejectedAmount: z.coerce.number().min(0).optional(),
+    rejectReason: z.string().optional(),
+  })).min(1, "Agrega al menos un material"),
 });
 
-export function MaterialIntakeForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
+type FormValues = z.infer<typeof formSchema>;
+
+interface MaterialIntakeFormProps {
+  initialData?: FormValues;
+}
+
+export function MaterialIntakeForm({ initialData }: MaterialIntakeFormProps) {
+  const router = useRouter();
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      fixedFee: 0,
-      weekCode: new Date().getWeek(),
+    defaultValues: initialData || {
+      generalInfo: {
+        fixedFee: 0,
+        weekCode: getCurrentWeek(),
+      },
+      materials: [{ appliesFee: true }],
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const materialsArray = useFieldArray({
+    control: form.control,
+    name: "materials",
+  });
+
+  function onSubmit(values: FormValues) {
     console.log(values);
+    router.push("/dashboard/materials-intake");
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Información General</CardTitle>
-            <CardDescription>
-              Ingresa la información básica del recibo de materiales
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="providerId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Proveedor</FormLabel>
-                    <Select 
-                      onValueChange={field.onChange} 
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona un proveedor" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="1">Juan Pérez</SelectItem>
-                        {/* Add more providers */}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <TooltipProvider>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <HeaderSection />
+          <GeneralInfoSection control={form.control} />
+          <MaterialsTableSection control={form.control} fieldArray={materialsArray} />
 
-              <FormField
-                control={form.control}
-                name="routeId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Ruta</FormLabel>
-                    <Select 
-                      onValueChange={field.onChange} 
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona una ruta" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="1">Ruta Norte</SelectItem>
-                        {/* Add more routes */}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="vehicleId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Vehículo (Opcional)</FormLabel>
-                    <Select 
-                      onValueChange={field.onChange} 
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona un vehículo" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="1">ABC123 - Camión</SelectItem>
-                        {/* Add more vehicles */}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="weekCode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Semana</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="fixedFee"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tarifa Fija</FormLabel>
-                    <FormControl>
-                      <Input type="number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="rejectionSiteId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Sitio de Rechazo</FormLabel>
-                    <Select 
-                      onValueChange={field.onChange} 
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona un sitio" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="1">Sitio Principal</SelectItem>
-                        {/* Add more sites */}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="flex justify-end">
-          <Button type="submit">
-            Siguiente
-          </Button>
-        </div>
-      </form>
-    </Form>
+          <div className="flex justify-end gap-2">
+            <Button 
+              type="button" 
+              variant="outline"
+              onClick={() => router.push("/dashboard/materials-intake")}
+            >
+              Cancelar
+            </Button>
+            <Button type="submit">{initialData ? "Actualizar" : "Guardar"}</Button>
+          </div>
+        </form>
+      </Form>
+    </TooltipProvider>
   );
+}
+
+function getCurrentWeek() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 1);
+  const diff = now.getTime() - start.getTime();
+  const oneWeek = 1000 * 60 * 60 * 24 * 7;
+  return Math.ceil(diff / oneWeek);
 }

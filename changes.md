@@ -1,15 +1,23 @@
 # Changes Log
 
-## [2024-12-29]
+## [2024-12-31]
 ### Added
-- Created macro routes creation/edit pages
-  - Added form component with validation
-  - Implemented navigation flow
-  - Added mock data handling
-- Added types for MacroRoute, Route, and Nueca
-- Created directory structure for new features
+- Created materials-intake components
+  - MaterialIntakeTabs for form navigation
+  - General form with provider, route and vehicle info
+  - Details form with material items
+  - Summary view with calculations
+  - Form field components for reusability
+- Added pages
+  - List view with DataTable
+  - Create form 
+  - Edit form
+  - Dynamic routing with [id]
+- Mock data for development
+- Form validations with Zod
+- Responsive layouts
+- Spanish translations
 
-### Updated
-- MacroRoutesList component to handle row clicks and navigation
-- Moved mock data to separate file for better organization
-- Improved form UX with proper validation and error handling
+### Changed
+- Moved routes from (dashboard) to dashboard folder
+- Updated sidebar navigation paths

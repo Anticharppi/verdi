@@ -17,7 +17,7 @@ export default function MaterialIntakePage() {
             Gestiona la recepción de materiales de los proveedores
           </p>
         </div>
-        <Button onClick={() => router.push("/materials-intake/create")}>
+        <Button onClick={() => router.push("/dashboard/materials-intake/create")}>
           <Plus className="mr-2 h-4 w-4" />
           Nuevo Recibo
         </Button>
