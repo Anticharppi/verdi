@@ -5,11 +5,17 @@ import { FormSection } from "@/components/forms/sections/form-section";
 
 interface StationBasicInfoProps {
   values: any;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void;
   disabled?: boolean;
 }
 
-export function StationBasicInfo({ values, onChange, disabled }: StationBasicInfoProps) {
+export function StationBasicInfo({
+  values,
+  onChange,
+  disabled,
+}: StationBasicInfoProps) {
   return (
     <FormSection
       icon={Building2}

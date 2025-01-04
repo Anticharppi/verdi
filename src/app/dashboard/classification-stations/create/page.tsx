@@ -1,6 +1,6 @@
 "use client";
 
-import { StationForm } from "../_components/forms/station-form";
+import { StationForm } from "../../../../components/clasification-stations/forms/station-form";
 
 export default function CreateStationPage() {
   const initialData = {

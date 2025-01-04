@@ -14,7 +14,7 @@ import {
   ScrollText,
   UsersRound,
   Map,
-  PackageCheck
+  PackageCheck,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState } from "react";

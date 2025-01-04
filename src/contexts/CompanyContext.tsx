@@ -1,7 +1,8 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
-import { Company, CompanyContextType } from "@/lib/types/company";
+import { CompanyContextType } from "@/lib/types/company";
+import { Company } from "@prisma/client";
 
 const CompanyContext = createContext<CompanyContextType | undefined>(undefined);
 
