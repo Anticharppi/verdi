@@ -7,9 +7,9 @@ interface SelectedCity {
 }
 
 export interface CompanyFormValues {
-  name: string;
-  description: string;
-  website: string;
+  businessName: string;
+  superServicesId: string;
+  nit: string;
   email: string;
   phone: string;
   address: string;

@@ -3,79 +3,75 @@
 import { useCompany } from "@/contexts/CompanyContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { ArrowLeft, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
-
-// Mock data para estados y ciudades
-const mockStates = [
-  { code: "ANT", name: "Antioquia" },
-  { code: "ATL", name: "Atlántico" },
-  { code: "BOL", name: "Bolívar" },
-  { code: "BOY", name: "Boyacá" },
-  { code: "CAL", name: "Caldas" }
-];
+import { useStates } from "@/hooks";
 
 const mockCities = {
-  "ANT": [
+  ANT: [
     { code: "MED", name: "Medellín" },
     { code: "ENV", name: "Envigado" },
     { code: "BEL", name: "Bello" },
-    { code: "ITA", name: "Itagüí" }
+    { code: "ITA", name: "Itagüí" },
   ],
-  "ATL": [
+  ATL: [
     { code: "BAQ", name: "Barranquilla" },
     { code: "SOL", name: "Soledad" },
-    { code: "MAL", name: "Malambo" }
+    { code: "MAL", name: "Malambo" },
   ],
-  "BOL": [
+  BOL: [
     { code: "CTG", name: "Cartagena" },
     { code: "MAG", name: "Magangué" },
-    { code: "TUR", name: "Turbaco" }
-  ]
+    { code: "TUR", name: "Turbaco" },
+  ],
 };
 
 export default function CreateServiceArea() {
   const router = useRouter();
   const { selectedCompany } = useCompany();
   const [selectedState, setSelectedState] = useState<string>("");
-  const [selectedCities, setSelectedCities] = useState<{ code: string; name: string }[]>([]);
+  const [selectedCities, setSelectedCities] = useState<
+    { code: string; name: string }[]
+  >([]);
   const [isLoading, setIsLoading] = useState(true);
+  const states = useStates();
 
   useEffect(() => {
     if (!selectedCompany) {
-      router.push('/dashboard/service-areas');
+      router.push("/dashboard/service-areas");
     } else {
       setIsLoading(false);
     }
   }, [selectedCompany, router]);
-  
+
   if (isLoading) {
     return null;
   }
 
-  const availableCities = mockCities[selectedState as keyof typeof mockCities] || [];
+  const availableCities =
+    mockCities[selectedState as keyof typeof mockCities] || [];
   const remainingCities = availableCities.filter(
-    city => !selectedCities.find(selected => selected.code === city.code)
+    (city) => !selectedCities.find((selected) => selected.code === city.code)
   );
 
   const handleAddCity = (cityCode: string) => {
-    const city = availableCities.find(c => c.code === cityCode);
+    const city = availableCities.find((c) => c.code === cityCode);
     if (city) {
       setSelectedCities([...selectedCities, city]);
     }
   };
 
   const handleRemoveCity = (cityCode: string) => {
-    setSelectedCities(selectedCities.filter(city => city.code !== cityCode));
+    setSelectedCities(selectedCities.filter((city) => city.code !== cityCode));
   };
 
   return (
@@ -85,15 +81,18 @@ export default function CreateServiceArea() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => router.push('/dashboard/service-areas')}
+            onClick={() => router.push("/dashboard/service-areas")}
             className="hover:bg-gray-100"
           >
             <ArrowLeft className="h-5 w-5 text-gray-600" />
           </Button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Nueva Área de Servicio</h1>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Nueva Área de Servicio
+            </h1>
             <p className="mt-2 text-gray-600">
-              Agrega un nuevo departamento y sus ciudades de operación para {selectedCompany.name || selectedCompany.businessName}
+              Agrega un nuevo departamento y sus ciudades de operación para{" "}
+              {selectedCompany.businessName}
             </p>
           </div>
         </div>
@@ -120,7 +119,7 @@ export default function CreateServiceArea() {
                     <SelectValue placeholder="Selecciona un departamento" />
                   </SelectTrigger>
                   <SelectContent>
-                    {mockStates.map((state) => (
+                    {states.data.map((state) => (
                       <SelectItem key={state.code} value={state.code}>
                         {state.name}
                       </SelectItem>
@@ -141,11 +140,13 @@ export default function CreateServiceArea() {
                     disabled={remainingCities.length === 0}
                   >
                     <SelectTrigger className="w-full border-gray-300 focus:ring-emerald-500 focus:border-emerald-500">
-                      <SelectValue placeholder={
-                        remainingCities.length === 0 
-                          ? "No hay más ciudades disponibles" 
-                          : "Selecciona una ciudad"
-                      } />
+                      <SelectValue
+                        placeholder={
+                          remainingCities.length === 0
+                            ? "No hay más ciudades disponibles"
+                            : "Selecciona una ciudad"
+                        }
+                      />
                     </SelectTrigger>
                     <SelectContent>
                       {remainingCities.map((city) => (
@@ -166,7 +167,7 @@ export default function CreateServiceArea() {
                   </label>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {selectedCities.map((city) => (
-                      <Badge 
+                      <Badge
                         key={city.code}
                         variant="secondary"
                         className="px-2 py-1 flex items-center gap-1 bg-gray-100 hover:bg-gray-200 text-gray-700"
@@ -189,14 +190,14 @@ export default function CreateServiceArea() {
             <div className="flex justify-end gap-4 pt-4 mt-6 border-t border-gray-200">
               <Button
                 variant="outline"
-                onClick={() => router.push('/dashboard/service-areas')}
+                onClick={() => router.push("/dashboard/service-areas")}
                 className="text-gray-700 border-gray-300 hover:bg-gray-50"
               >
                 Cancelar
               </Button>
               <Button
                 disabled={selectedCities.length === 0}
-                onClick={() => router.push('/dashboard/service-areas')}
+                onClick={() => router.push("/dashboard/service-areas")}
                 className="bg-emerald-500 text-white hover:bg-emerald-600"
               >
                 Guardar área de servicio

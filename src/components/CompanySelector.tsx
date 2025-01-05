@@ -1,7 +1,7 @@
 "use client";
 
 import { useCompany } from "@/contexts/CompanyContext";
-import { useCompanies } from "@/hooks/use-companies";
+import { useCompanies } from "@/hooks/companies/use-companies";
 import { Company } from "@prisma/client";
 import { Building2, ChevronDown, Plus } from "lucide-react";
 import Link from "next/link";

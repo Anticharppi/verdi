@@ -1,0 +1,114 @@
+[
+  {
+    "code": "101",
+    "name": "Aluminio"
+  },
+  {
+    "code": "102",
+    "name": "Chatarra"
+  },
+  {
+    "code": "103",
+    "name": "Cobre"
+  },
+  {
+    "code": "104",
+    "name": "Bronce"
+  },
+  {
+    "code": "105",
+    "name": "Antimonio"
+  },
+  {
+    "code": "106",
+    "name": "Acero"
+  },
+  {
+    "code": "199",
+    "name": "Otros metales"
+  },
+  {
+    "code": "201",
+    "name": "Archivo"
+  },
+  {
+    "code": "202",
+    "name": "Cartón"
+  },
+  {
+    "code": "203",
+    "name": "Cubetas o paneles"
+  },
+  {
+    "code": "204",
+    "name": "Periodico"
+  },
+  {
+    "code": "205",
+    "name": "Plegadiza"
+  },
+  {
+    "code": "206",
+    "name": "Tetra pack"
+  },
+  {
+    "code": "207",
+    "name": "Plastificado"
+  },
+  {
+    "code": "208",
+    "name": "Kraf"
+  },
+  {
+    "code": "299",
+    "name": "Otros papel y cartón"
+  },
+  {
+    "code": "301",
+    "name": "Acrílico"
+  },
+  {
+    "code": "302",
+    "name": "Pasta"
+  },
+  {
+    "code": "303",
+    "name": "PET"
+  },
+  {
+    "code": "304",
+    "name": "PVC"
+  },
+  {
+    "code": "305",
+    "name": "Plástico blanco"
+  },
+  {
+    "code": "306",
+    "name": "Polietileno"
+  },
+  {
+    "code": "307",
+    "name": "Soplado"
+  },
+  {
+    "code": "308",
+    "name": "Polipropileno"
+  },
+  {
+    "code": "399",
+    "name": "Otros plásticos"
+  },
+  {
+    "code": "499",
+    "name": "Otros vidrios"
+  },
+  {
+    "code": "599",
+    "name": "Otros textiles"
+  },
+  {
+    "code": "699",
+    "name": "Otros maderables"
+  }
+]

@@ -1,113 +1,108 @@
 "use client";
 
-import { Mail, Phone, Globe, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
+import { CompanyFormValues } from "@/schemas/company";
 
-interface CompanyContactInfoProps {
-  email: string;
-  phone: string;
-  website: string;
-  address: string;
-  loading: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+export function CompanyContactInfo() {
+  const { control } = useFormContext<CompanyFormValues>();
 
-export function CompanyContactInfo({
-  email,
-  phone,
-  website,
-  address,
-  loading,
-  onChange
-}: CompanyContactInfoProps) {
   return (
-    <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-      <div className="flex items-center gap-4 mb-6">
+    <Card>
+      <CardHeader className="flex flex-row items-center gap-4">
         <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
           <Mail className="h-6 w-6 text-blue-600" />
         </div>
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">Información de Contacto</h2>
-          <p className="text-sm text-gray-500">Datos de contacto y ubicación</p>
+          <CardTitle>Información de Contacto</CardTitle>
+          <CardDescription>Datos de contacto y ubicación</CardDescription>
         </div>
-      </div>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-2 gap-6">
+          <div className="space-y-6">
+            <FormField
+              control={control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                      <Input
+                        {...field}
+                        className="pl-10"
+                        type="email"
+                        placeholder="contacto@empresa.com"
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-      <div className="grid grid-cols-2 gap-6">
-        <div className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Email
-            </label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="email"
-                name="email"
-                value={email}
-                onChange={onChange}
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-gray-900 text-sm transition duration-200 ease-in-out hover:border-gray-400"
-                disabled={loading}
-                placeholder="contacto@empresa.com"
-              />
-            </div>
+            <FormField
+              control={control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Teléfono</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                      <Input
+                        {...field}
+                        className="pl-10"
+                        type="tel"
+                        placeholder="+57 (XXX) XXX-XXXX"
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Teléfono
-            </label>
-            <div className="relative">
-              <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="tel"
-                name="phone"
-                value={phone}
-                onChange={onChange}
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-gray-900 text-sm transition duration-200 ease-in-out hover:border-gray-400"
-                disabled={loading}
-                placeholder="+1 (555) 123-4567"
-              />
-            </div>
-          </div>
+          <FormField
+            control={control}
+            name="address"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Dirección</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                    <Input
+                      {...field}
+                      className="pl-10"
+                      placeholder="Calle Principal #123"
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
-
-        <div className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Sitio Web
-            </label>
-            <div className="relative">
-              <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="url"
-                name="website"
-                value={website}
-                onChange={onChange}
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-gray-900 text-sm transition duration-200 ease-in-out hover:border-gray-400"
-                disabled={loading}
-                placeholder="https://www.empresa.com"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Dirección
-            </label>
-            <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                name="address"
-                value={address}
-                onChange={onChange}
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-gray-900 text-sm transition duration-200 ease-in-out hover:border-gray-400"
-                disabled={loading}
-                placeholder="123 Calle Principal, Ciudad"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

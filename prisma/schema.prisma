@@ -8,22 +8,21 @@ datasource db {
 }
 
 model State {
-  id            String         @id @default(cuid())
-  code          String         @unique
-  name          String
-  cities        City[]
-  companyStates CompanyState[]
+  id     String @id @default(cuid())
+  code   String @unique
+  name   String
+  cities City[]
 
   @@map("states")
 }
 
 model City {
-  id          String        @id @default(cuid())
-  name        String
-  code        String
-  stateCode   String        @map("state_code")
-  state       State         @relation(fields: [stateCode], references: [code])
-  companyCity CompanyCity[]
+  id        String        @id @default(cuid())
+  name      String
+  code      String
+  stateId   String        @map("state_id")
+  state     State         @relation(fields: [stateId], references: [id])
+  companies CompanyCity[]
 
   @@map("cities")
 }
@@ -39,7 +38,7 @@ model Company {
   businessName              String                      @map("business_name")
   nit                       String                      @unique
   email                     String                      @unique
-  phoneNumber               String                      @unique @map("phone_number")
+  phone                     String                      @unique @map("phone")
   imageUrl                  String?                     @map("image_url")
   address                   String
   createdAt                 DateTime                    @default(now()) @map("created_at")
@@ -49,8 +48,7 @@ model Company {
   routes                    Route[]
   nuecas                    Nueca[]
   nuaps                     Nuap[]
-  companyStates             CompanyState[]
-  companyCities             CompanyCity[]
+  cities                    CompanyCity[]
   materials                 Material[]
   materialsIntake           MaterialsIntake[]
   materialsIntakeItems      MaterialsIntakeItem[]
@@ -63,27 +61,14 @@ model Company {
   @@map("companies")
 }
 
-model CompanyState {
-  id          String        @id @default(cuid())
-  stateCode   String        @map("state_code")
-  companyId   String        @map("company_id")
-  state       State         @relation(fields: [stateCode], references: [code])
-  company     Company       @relation(fields: [companyId], references: [id])
-  companyCity CompanyCity[]
-
-  @@map("companies_states")
-}
-
 model CompanyCity {
-  id             String       @id @default(cuid())
-  cityId         String       @map("city_id")
-  companyStateId String       @map("company_state_id")
-  companyId      String       @map("company_id")
-  city           City         @relation(fields: [cityId], references: [id])
-  company        Company      @relation(fields: [companyId], references: [id])
-  companyCity    CompanyState @relation(fields: [companyStateId], references: [id])
-  nuecas         Nueca[]
-  nuaps          Nuap[]
+  id        String  @id @default(cuid())
+  cityId    String  @map("city_id")
+  companyId String  @map("company_id")
+  city      City    @relation(fields: [cityId], references: [id])
+  company   Company @relation(fields: [companyId], references: [id])
+  nuecas    Nueca[]
+  nuaps     Nuap[]
 
   @@map("companies_cities")
 }

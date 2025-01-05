@@ -1,15 +1,6 @@
 import CompanyForm from "@/components/forms/CompanyForm";
 
-export default function NewCompanyPage() {
-  const initialValues = {
-    name: "",
-    description: "",
-    website: "",
-    email: "",
-    phone: "",
-    address: "",
-  };
-
+export default function Page() {
   return (
     <div className="h-full">
       <div className="mb-8">
@@ -19,7 +10,7 @@ export default function NewCompanyPage() {
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="p-6">
-          <CompanyForm initialData={initialValues} isNew={true} />
+          <CompanyForm />
         </div>
       </div>
     </div>
