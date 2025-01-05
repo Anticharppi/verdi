@@ -1,19 +1,25 @@
-import { QueryContextWrapper } from "@/components/QueryContextWrapper";
 import { Sidebar } from "@/components/Sidebar";
 import { CompanyProvider } from "@/contexts/CompanyContext";
+import { SessionProvider } from "@/contexts/SessionContext";
+import { getUserInSession } from "@/lib/actions/users";
+import { redirect } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 
 type Props = {
   children: React.ReactNode;
 };
 
-export default function DashboardLayout({ children }: Props) {
+export default async function DashboardLayout({ children }: Props) {
+  const user = await getUserInSession();
+
+  if (!user) return redirect("/welcome");
+
   return (
-    <QueryContextWrapper>
+    <SessionProvider>
       <CompanyProvider>
         <Sidebar>{children}</Sidebar>
         <Toaster position="top-right" />
       </CompanyProvider>
-    </QueryContextWrapper>
+    </SessionProvider>
   );
 }

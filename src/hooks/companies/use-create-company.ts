@@ -9,12 +9,12 @@ export function useCreateCompany() {
   return useMutation({
     mutationFn: createCompanyAction,
     onSettled: (data) => {
-      if (data.success) {
+      if (data?.success) {
         queryClient.invalidateQueries({ queryKey: queryKeys.companies.all });
         toast.success(data.message);
         redirect("/dashboard/companies");
       } else {
-        toast.error(data.message);
+        toast.error(data.message || "Ocurrió un error al crear la empresa");
       }
     },
   });

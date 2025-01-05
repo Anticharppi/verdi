@@ -9,4 +9,10 @@ export const queryKeys = {
     all: ["cities"] as const,
     citiesByStateId: (stateId: string) => ["cities", { stateId }] as const,
   },
+  session: {
+    user: ["session", "user"] as const,
+  },
+  auth: {
+    welcome: ["auth", "welcome"] as const,
+  },
 };

@@ -38,7 +38,7 @@ export default function NavigationBar() {
                   Iniciar Sesión
                 </LoginLink>
                 <RegisterLink
-                  postLoginRedirectURL="/dashboard/welcome"
+                  postLoginRedirectURL="/welcome"
                   className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-lg font-medium transition-all"
                 >
                   Registro
