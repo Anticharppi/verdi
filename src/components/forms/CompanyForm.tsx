@@ -36,6 +36,8 @@ export default function CompanyForm({
 
   const onSubmit = async (data: CompanyFormValues) => {
     try {
+      console.log("SSXXXXX");
+      
       if (isNew) await createCompany.mutateAsync(data);
     } catch (error) {
       console.error(error);
