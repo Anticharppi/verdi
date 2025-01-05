@@ -111,7 +111,6 @@ model User {
   lastName  String?
   createdAt DateTime      @default(now()) @map("created_at")
   updatedAt DateTime      @updatedAt @map("updated_at")
-  isAdmin   Boolean       @default(false) @map("is_admin")
   companies CompanyUser[]
 
   @@map("users")

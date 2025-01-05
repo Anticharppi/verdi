@@ -37,7 +37,10 @@ export default function NavigationBar() {
                 <LoginLink className="px-4 py-2 hover:text-emerald-300 transition-colors">
                   Iniciar Sesión
                 </LoginLink>
-                <RegisterLink className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-lg font-medium transition-all">
+                <RegisterLink
+                  postLoginRedirectURL="/dashboard/welcome"
+                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-lg font-medium transition-all"
+                >
                   Registro
                 </RegisterLink>
               </>
