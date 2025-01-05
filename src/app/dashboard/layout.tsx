@@ -3,6 +3,7 @@ import { SidebarNav } from "@/components/SidebarNav";
 import { CompanyProvider } from "@/contexts/CompanyContext";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/server";
 import { LogOut } from "lucide-react";
+import { Toaster } from "react-hot-toast";
 
 type Props = {
   children: React.ReactNode;
@@ -34,6 +35,7 @@ export default function DashboardLayout({ children }: Props) {
             <main className="p-8">{children}</main>
           </div>
         </div>
+        <Toaster position="top-right" />
       </CompanyProvider>
     </QueryContextWrapper>
   );

@@ -35,18 +35,24 @@ export default function CompanyForm({
   const createCompany = useCreateCompany();
 
   const onSubmit = async (data: CompanyFormValues) => {
-    if (isNew) await createCompany.mutateAsync(data);
+    try {
+      if (isNew) await createCompany.mutateAsync(data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <CompanyBasicInfo />
-          <CompanyContactInfo />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <CompanyBasicInfo />
+            <CompanyContactInfo />
+          </div>
           <CompanyOperatingCities />
 
-          <div className="flex items-center justify-end gap-4 bg-gray-50 px-6 py-4 rounded-lg border border-gray-100">
+          <div className="flex items-center justify-end gap-4 py-4">
             <Button
               type="button"
               variant="outline"

@@ -8,11 +8,7 @@ export default function Page() {
         <p className="mt-2 text-gray-600">Añade una nueva empresa al sistema</p>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="p-6">
-          <CompanyForm />
-        </div>
-      </div>
+      <CompanyForm />
     </div>
   );
 }
