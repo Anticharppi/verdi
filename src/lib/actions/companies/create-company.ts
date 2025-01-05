@@ -2,10 +2,13 @@
 
 import { CititesRepository, CompaniesRepository } from "@/lib/repositories";
 import { CompanyFormValues } from "@/schemas/company";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 export async function createCompanyAction(
   companyFormValues: CompanyFormValues
 ) {
+  const { id } = await getKindeServerSession().getUser();
+
   const existsCities = await CititesRepository.findByIds(
     companyFormValues.cities
   );
@@ -33,7 +36,7 @@ export async function createCompanyAction(
     };
   }
   const { cities, ...data } = companyFormValues;
-  await CompaniesRepository.create(data, cities);
+  await CompaniesRepository.create(data, cities, id);
 
   return {
     success: true,

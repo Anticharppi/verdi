@@ -1,10 +1,11 @@
-import { Company, Prisma } from "@prisma/client";
+import { Company, CompanyRole, Prisma } from "@prisma/client";
 import { db } from "./db";
 
 export class CompaniesRepository {
   static async create(
     data: Prisma.CompanyUncheckedCreateInput,
-    citiIds: string[]
+    citiIds: string[],
+    userId: string
   ) {
     return db.$transaction(async (tx) => {
       const company = await tx.company.create({
@@ -25,6 +26,13 @@ export class CompaniesRepository {
           companyId: company.id,
           cityId: city.id,
         })),
+      });
+      await tx.companyUser.create({
+        data: {
+          companyId: company.id,
+          userId,
+          role: CompanyRole.admin,
+        },
       });
       return company;
     });
