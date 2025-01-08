@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { MapPinned } from "lucide-react";
 import {
@@ -17,12 +17,26 @@ import { useSelectedCities } from "@/hooks/use-selected-cities";
 import { StatesList } from "./StateList";
 
 export function CompanyOperatingCities() {
-  const { watch, setValue } = useFormContext<CompanyFormValues>();
+  const {
+    control,
+    watch,
+    setValue,
+    formState: { errors },
+    setError,
+    clearErrors,
+  } = useFormContext<CompanyFormValues>();
   const cities = watch("cities") || [];
   const { data: states, isLoading } = useStates();
   const [manuallySelectedStates, setManuallySelectedStates] = useState<
     string[]
-  >([]);
+  >(() => {
+    if (!states?.length) return [];
+    const initialSelectedStates = states
+      .filter((state) => state.cities.some((cityId) => cities.includes(cityId)))
+      .map((state) => state.id);
+
+    return initialSelectedStates;
+  });
   const [persistentStateColors] = useState(() => new Map());
 
   const { selectedCities, setSelectedCities, addCity, removeCity } =
@@ -66,7 +80,6 @@ export function CompanyOperatingCities() {
   const handleStateChange = useCallback(
     (stateId: string) => {
       if (selectedStateIds.includes(stateId)) {
-        // Remove the state and its cities
         const newCities = selectedCities.filter(
           (cityId) =>
             !states
@@ -79,10 +92,23 @@ export function CompanyOperatingCities() {
           prev.filter((id) => id !== stateId)
         );
       } else {
-        setManuallySelectedStates((prev) => [...prev, stateId]);
+        const newManuallySelectedStates = [...states]
+          .filter((state) =>
+            [...manuallySelectedStates, stateId].includes(state.id)
+          )
+          .map((state) => state.id);
+
+        setManuallySelectedStates(newManuallySelectedStates);
       }
     },
-    [selectedStateIds, selectedCities, states, setValue, setSelectedCities]
+    [
+      selectedStateIds,
+      selectedCities,
+      states,
+      setValue,
+      setSelectedCities,
+      manuallySelectedStates,
+    ]
   );
 
   const handleCityAdd = useCallback(
@@ -104,6 +130,37 @@ export function CompanyOperatingCities() {
     },
     [removeCity, selectedCities, setValue]
   );
+
+  const validateStateCities = useCallback(() => {
+    if (!states) return;
+
+    const statesWithoutCities = selectedStateIds.filter((stateId) => {
+      const state = states.find((s) => s.id === stateId);
+      if (!state) return false;
+
+      // Verifica si el estado tiene alguna ciudad seleccionada
+      return !state.cities.some((cityId) => selectedCities.includes(cityId));
+    });
+
+    if (statesWithoutCities.length > 0) {
+      const stateNames = statesWithoutCities
+        .map((id) => states.find((s) => s.id === id)?.name)
+        .filter(Boolean)
+        .join(", ");
+
+      setError("cities", {
+        type: "custom",
+        message: `Los siguientes departamentos no tienen ciudades seleccionadas: ${stateNames}`,
+      });
+    } else {
+      clearErrors("cities");
+    }
+  }, [selectedStateIds, selectedCities, states, setError, clearErrors]);
+
+  // Ejecutar la validación cuando cambien los estados o ciudades seleccionadas
+  useEffect(() => {
+    validateStateCities();
+  }, [selectedStateIds, selectedCities, validateStateCities]);
 
   if (isLoading) {
     return (
@@ -153,6 +210,9 @@ export function CompanyOperatingCities() {
         />
 
         {/* Grid automático que se ajusta según el contenido */}
+        {errors.cities && (
+          <div className="text-sm text-red-600">{errors.cities.message}</div>
+        )}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 auto-rows-auto">
           {selectedStateIds.map((stateId) => {
             const state = states?.find((s) => s.id === stateId);

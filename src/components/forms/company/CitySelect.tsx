@@ -13,13 +13,18 @@ import { State } from "@/types/state-with-cities";
 import { useFormContext } from "react-hook-form";
 import { X } from "lucide-react";
 
+type StateColor = {
+  bg: string;
+  text: string;
+};
+
 type Props = {
   states: State[];
   stateId: string;
   selectedCities: string[];
+  stateColorMap: Map<string, StateColor>;
   onCityAdd: (cityId: string) => void;
   onCityRemove: (cityId: string) => void;
-  stateColorMap: Map<string, { bg: string; text: string }>;
 };
 
 export function CitySelect({
@@ -33,7 +38,6 @@ export function CitySelect({
   const { data: cities, isLoading } = useCities(stateId);
   const { control } = useFormContext<CompanyFormValues>();
 
-  // Encontrar el estado actual y sus ciudades seleccionadas
   const currentState = states.find((s) => s.id === stateId);
   const stateCities = selectedCities.filter((cityId) =>
     currentState?.cities.includes(cityId)
@@ -46,14 +50,8 @@ export function CitySelect({
   if (!currentState) return null;
 
   const stateColor = stateColorMap.get(stateId);
-  // Obtenemos los colores del mapa de estados o usamos un color por defecto
   const bgColor = stateColor?.bg || "bg-gray-100";
   const textColor = stateColor?.text || "text-gray-700";
-
-  // Aplicamos una sombra suave cuando se usa el color del estado
-  const shadowColor = stateColor
-    ? `hover:shadow-${bgColor.split("-")[1]}-200`
-    : "";
 
   return (
     <div className="rounded-lg border border-gray-100 shadow-sm">
