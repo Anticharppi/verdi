@@ -9,27 +9,21 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { stateColors } from "@/constants/state-colors";
 import { CompanyFormValues } from "@/schemas/company";
 import { CitySelect } from "./CitySelect";
-import { SelectedCities } from "./SelectedCities";
 import { useStates } from "@/hooks";
 import { useSelectedCities } from "@/hooks/use-selected-cities";
 import { StatesList } from "./StateList";
 
 export function CompanyOperatingCities() {
-  const { control, watch, setValue } = useFormContext<CompanyFormValues>();
+  const { watch, setValue } = useFormContext<CompanyFormValues>();
   const cities = watch("cities") || [];
   const { data: states, isLoading } = useStates();
   const [manuallySelectedStates, setManuallySelectedStates] = useState<
     string[]
   >([]);
+  const [persistentStateColors] = useState(() => new Map());
 
   const { selectedCities, setSelectedCities, addCity, removeCity } =
     useSelectedCities(cities);
@@ -46,23 +40,28 @@ export function CompanyOperatingCities() {
     return [...new Set([...statesWithCities, ...manuallySelectedStates])];
   }, [selectedCities, states, manuallySelectedStates]);
 
-  // Primero agreguemos un console.log para depurar
   const stateColorMap = useMemo(() => {
-    const map = new Map();
-    console.log("selectedStateIds:", selectedStateIds);
-    console.log("states:", states);
+    const availableColors = [...stateColors];
 
     selectedStateIds.forEach((stateId) => {
-      const stateIndex =
-        states?.findIndex((state) => state.id === stateId) ?? 0;
-      const colorObject = stateColors[stateIndex % stateColors.length];
-      map.set(stateId, colorObject);
-      console.log("Setting color for state:", stateId, "color:", colorObject);
+      if (!persistentStateColors.has(stateId)) {
+        // Encontrar el primer color disponible que no esté en uso
+        const unusedColor =
+          availableColors.find(
+            (color) =>
+              ![...persistentStateColors.values()].some(
+                (existingColor) =>
+                  existingColor.bg === color.bg &&
+                  existingColor.text === color.text
+              )
+          ) || availableColors[0]; // Fallback al primer color si todos están en uso
+
+        persistentStateColors.set(stateId, unusedColor);
+      }
     });
 
-    console.log("Final color map:", Array.from(map.entries()));
-    return map;
-  }, [selectedStateIds, states]);
+    return persistentStateColors;
+  }, [selectedStateIds]);
 
   const handleStateChange = useCallback(
     (stateId: string) => {
@@ -146,28 +145,31 @@ export function CompanyOperatingCities() {
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-6">
         <StatesList
           states={states || []}
           selectedStates={selectedStateIds}
           onStateChange={handleStateChange}
         />
 
-        {selectedStateIds.map((stateId) => {
-          const state = states?.find((s) => s.id === stateId);
-          if (!state) return null;
-          return (
-            <CitySelect
-              key={stateId}
-              stateId={stateId}
-              states={states}
-              selectedCities={selectedCities}
-              onCityAdd={handleCityAdd}
-              onCityRemove={handleCityRemove}
-              stateColorMap={stateColorMap}
-            />
-          );
-        })}
+        {/* Grid automático que se ajusta según el contenido */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 auto-rows-auto">
+          {selectedStateIds.map((stateId) => {
+            const state = states?.find((s) => s.id === stateId);
+            if (!state) return null;
+            return (
+              <CitySelect
+                key={stateId}
+                stateId={stateId}
+                states={states}
+                selectedCities={selectedCities}
+                onCityAdd={handleCityAdd}
+                onCityRemove={handleCityRemove}
+                stateColorMap={stateColorMap}
+              />
+            );
+          })}
+        </div>
       </CardContent>
     </Card>
   );
