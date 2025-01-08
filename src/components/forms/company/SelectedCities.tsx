@@ -1,54 +1,53 @@
-import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { stateColors } from "@/constants/state-colors";
 import { useCities } from "@/hooks";
-import { State } from "@prisma/client";
-import { X } from "lucide-react";
-
-type Props = {
+import { State } from "@/types/state-with-cities";
+import { useMemo } from "react";
+interface SelectedCitiesProps {
   cityId: string;
-  states: State[];
-  selectedStates: string[];
+  state: State;
   onRemove: (cityId: string) => void;
   stateColorMap: Map<string, (typeof stateColors)[0]>;
-};
+}
 
 export function SelectedCities({
   cityId,
-  states,
-  selectedStates,
-  onRemove,
+  state,
   stateColorMap,
-}: Props) {
-  let cityData = null;
+  onRemove,
+}: SelectedCitiesProps) {
+  const { data: cities, isLoading: isLoadingCities } = useCities(state.id);
 
-  for (const stateId of selectedStates) {
-    const { data: cities } = useCities(stateId);
-    const city = cities?.find((c) => c.id === cityId);
-    if (city) {
-      const state = states.find((s) => s.id === stateId);
-      cityData = { city, stateName: state?.name, stateId };
-      break;
-    }
-  }
+  if (isLoadingCities || !cities) return <Skeleton className="w-20 h-6" />;
 
-  if (!cityData) return null;
+  const city = useMemo(
+    () => cities.find((city) => city.id === cityId),
+    [cities, cityId]
+  );
 
-  const colorScheme = stateColorMap.get(cityData.stateId) || stateColors[0];
+  if (!city) return null;
+
+  const colorObject = stateColorMap.get(state.id) || {
+    bg: "bg-gray-50",
+    border: "border-gray-100",
+    text: "text-gray-700",
+    textLight: "text-gray-400",
+  };
 
   return (
-    <Badge
-      variant="secondary"
-      className={`flex items-center gap-2 pl-3 pr-2 py-1.5 ${colorScheme.bg} border ${colorScheme.border}`}
+    <span
+      className={`inline-flex items-center gap-1 px-2 py-1 text-xs rounded-full ${colorObject.bg} ${colorObject.border} border`}
     >
-      <span className={colorScheme.text}>{cityData.city.name}</span>
-      <span className={colorScheme.textLight}>({cityData.stateName})</span>
+      <span className={colorObject.text}>
+        {state.name} - {city.name}
+      </span>
       <button
         type="button"
         onClick={() => onRemove(cityId)}
-        className={`${colorScheme.textLight} hover:${colorScheme.text} focus:outline-none ml-1`}
+        className={`ml-1 ${colorObject.textLight} hover:text-red-500`}
       >
-        <X className="h-4 w-4" />
+        ×
       </button>
-    </Badge>
+    </span>
   );
 }

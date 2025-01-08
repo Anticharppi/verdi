@@ -45,7 +45,7 @@ export function CompanySelector() {
   if (!companies?.length) {
     return (
       <Link
-        href="/dashboard/companies/new"
+        href="/dashboard/companies/create"
         className="flex items-center justify-between w-full px-3 py-2 text-gray-300 bg-gradient-to-r from-blue-900/50 to-blue-800/50 hover:from-blue-900/70 hover:to-blue-800/70 rounded-lg transition-all duration-200 group"
       >
         <div className="flex items-center gap-2">
@@ -104,7 +104,7 @@ export function CompanySelector() {
               </button>
             ))}
             <Link
-              href="/dashboard/companies/new"
+              href="/dashboard/companies/create"
               className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-300 hover:bg-blue-900/50 transition-colors border-t border-white/10"
             >
               <Plus className="w-5 h-5 flex-shrink-0" />

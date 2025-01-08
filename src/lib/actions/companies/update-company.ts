@@ -4,12 +4,10 @@ import { CititesRepository, CompaniesRepository } from "@/lib/repositories";
 import { CompanyFormValues } from "@/schemas/company";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
-export async function createCompanyAction(
+export async function updateCompanyAction(
   companyFormValues: CompanyFormValues
 ) {
   try {
-    const user = await getKindeServerSession().getUser();
-
     const existsCities = await CititesRepository.findByIds(
       companyFormValues.cities
     );
@@ -24,30 +22,27 @@ export async function createCompanyAction(
     }
 
     const exists = await CompaniesRepository.findBy({
-      nit: companyFormValues.nit,
-      email: companyFormValues.email,
-      superServicesId: companyFormValues.superServicesId,
-      phone: companyFormValues.phone,
+      id: companyFormValues.id,
     });
 
-    if (exists) {
+    if (!exists) {
       return {
         success: false,
-        message: "Ya existe una empresa con estos datos",
+        message: "La empresa no se encontró",
       };
     }
-    const { cities, ...data } = companyFormValues;
-    await CompaniesRepository.create(data, cities, user.id);
+    const { cities, id, ...data } = companyFormValues;
+    await CompaniesRepository.update(id, data, cities);
 
     return {
       success: true,
-      message: "Empresa creada correctamente",
+      message: "Empresa editada correctamente",
     };
   } catch (error) {
     const err = new Error(error);
     return {
       success: false,
-      message: err.message || "Ocurrió un error al crear la empresa",
+      message: err.message || "Ocurrió un error al editar la empresa",
     };
   }
 }

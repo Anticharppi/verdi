@@ -61,7 +61,7 @@ export const Hero = () => {
           variants={staggerContainer}
           className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
         >
-          <Link href="/dashboard/companies/new" className="contents">
+          <Link href="/dashboard/companies/create" className="contents">
             <motion.div
               variants={fadeInUp}
               whileHover={{ scale: 1.02 }}

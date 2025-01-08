@@ -1,16 +1,17 @@
-import { createCompanyAction } from "@/lib/actions";
+import { updateCompanyAction } from "@/lib/actions";
 import { queryKeys } from "@/store";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 
-export function useCreateCompany() {
+export function useUpdateCompany() {
   const queryClient = useQueryClient();
+
   return useMutation({
-    mutationFn: createCompanyAction,
+    mutationFn: updateCompanyAction,
     onSettled: (data, error) => {
       if (error) {
         return toast.error(
-          error.message || "Ocurrió un error al crear la empresa"
+          error.message || "Ocurrió un error al actualizar la empresa"
         );
       }
       if (data?.success) {

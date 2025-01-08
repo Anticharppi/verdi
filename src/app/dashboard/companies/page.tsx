@@ -40,7 +40,7 @@ export default function CompaniesPage() {
         </div>
 
         <Link
-          href="/dashboard/companies/new"
+          href="/dashboard/companies/create"
           className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
         >
           <Plus className="w-5 h-5" />

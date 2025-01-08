@@ -1,30 +1,30 @@
 import { fakeCompanies } from "@/lib/data/fakeData";
 import CompanyForm from "@/components/forms/CompanyForm";
+import { getCompanyAction } from "@/lib/actions";
+import NotFoundPage from "@/app/not-found";
 
-interface Props {
-  params: {
-    id: string;
-  };
-}
+type Params = {
+  id: string;
+};
 
-export default function EditCompanyPage({ params }: Props) {
-  const company = fakeCompanies.find(company => company.id === params.id);
+type Props = {
+  params: Promise<Params>;
+};
 
-  if (!company) {
-    return <div>Empresa no encontrada</div>;
-  }
+export default async function Page({ params }: Props) {
+  const { id } = await params;
+
+  const company = await getCompanyAction(id);
+
+  if (!company) return <NotFoundPage />;
 
   return (
     <div className="h-full">
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Editar Empresa</h1>
-        <p className="mt-2 text-gray-600">
-          Modifica los datos de la empresa
-        </p>
+        <p className="mt-2 text-gray-600">Modifica los datos de la empresa</p>
       </div>
 
-      {/* Form Container */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="p-6">
           <CompanyForm initialData={company} isNew={false} />

@@ -38,6 +38,42 @@ export class CompaniesRepository {
     });
   }
 
+  static async update(
+    id: string,
+    data: Prisma.CompanyUncheckedUpdateInput,
+    citiIds: string[]
+  ) {
+    return db.$transaction(async (tx) => {
+      await tx.company.update({
+        where: {
+          id,
+        },
+        data,
+      });
+      await tx.companyCity.deleteMany({
+        where: {
+          companyId: id,
+        },
+      });
+      const cities = await tx.city.findMany({
+        where: {
+          id: {
+            in: citiIds,
+          },
+        },
+        select: {
+          id: true,
+        },
+      });
+      await tx.companyCity.createMany({
+        data: cities.map((city) => ({
+          companyId: id,
+          cityId: city.id,
+        })),
+      });
+    });
+  }
+
   static async findBy(where: Partial<Company>) {
     return db.company.findFirst({
       where: {
@@ -54,6 +90,21 @@ export class CompaniesRepository {
         users: {
           some: {
             id: userId,
+          },
+        },
+      },
+    });
+  }
+
+  static async findById(id: string) {
+    return db.company.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        cities: {
+          select: {
+            cityId: true,
           },
         },
       },

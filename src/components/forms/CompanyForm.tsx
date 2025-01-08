@@ -13,7 +13,7 @@ import {
 import { CompanyBasicInfo } from "./company/CompanyBasicInfo";
 import { CompanyContactInfo } from "./company/CompanyContactInfo";
 import { CompanyOperatingCities } from "./company/CompanyOperatingCities";
-import { useCreateCompany } from "@/hooks";
+import { useCreateCompany, useUpdateCompany } from "@/hooks";
 
 interface CompanyFormProps {
   initialData?: Partial<CompanyFormValues>;
@@ -30,15 +30,24 @@ export default function CompanyForm({
     defaultValues: {
       ...defaultData,
       ...initialData,
+      cities: initialData?.cities || [],
     },
   });
+
   const createCompany = useCreateCompany();
+  const updateCompany = useUpdateCompany();
 
   const onSubmit = async (data: CompanyFormValues) => {
     try {
-      console.log("SSXXXXX");
-      
-      if (isNew) await createCompany.mutateAsync(data);
+      if (isNew) {
+        await createCompany.mutateAsync(data);
+      } else {
+        await updateCompany.mutateAsync({
+          id: initialData?.id as string,
+          ...data,
+        });
+      }
+      router.push("/dashboard/companies");
     } catch (error) {
       console.error(error);
     }
