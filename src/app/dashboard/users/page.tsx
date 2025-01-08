@@ -19,7 +19,7 @@ interface CompanyUser {
   userId: string;
   companyId: string;
   companyName: string;
-  role: 'admin' | 'manager' | 'operator';
+  role: "admin" | "manager" | "operator";
   createdAt: string;
   updatedAt: string;
 }
@@ -36,27 +36,26 @@ export default function UsersPage() {
 
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
-      case 'admin':
-        return 'bg-red-100 text-red-800';
-      case 'manager':
-        return 'bg-blue-100 text-blue-800';
-      case 'operator':
-        return 'bg-gray-100 text-gray-800';
+      case "admin":
+        return "bg-red-100 text-red-800";
+      case "manager":
+        return "bg-blue-100 text-blue-800";
+      case "operator":
+        return "bg-gray-100 text-gray-800";
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   // Filtrar usuarios por empresa
   const filteredUsers = selectedCompany
-    ? mockUsers.filter(user => 
-        user.companies.some(company => company.companyId === selectedCompany)
+    ? mockUsers.filter((user) =>
+        user.companies.some((company) => company.companyId === selectedCompany)
       )
     : mockUsers;
 
   return (
     <div className="h-full">
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">Usuarios</h1>
         <p className="mt-2 text-gray-600">
@@ -77,29 +76,12 @@ export default function UsersPage() {
               className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 w-80"
             />
           </div>
-
-          {/* Filtro de Empresa */}
-          <div className="relative">
-            <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <select
-              value={selectedCompany}
-              onChange={(e) => setSelectedCompany(e.target.value)}
-              className="appearance-none pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 bg-white w-64"
-            >
-              <option value="">Todas las empresas</option>
-              {mockCompanies.map((company) => (
-                <option key={company.id} value={company.id}>
-                  {company.businessName}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
 
-        <Link 
+        <Link
           href="/dashboard/users/new"
-          className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors">
+          className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition-colors"
+        >
           <Plus className="w-5 h-5" />
           <span>Agregar Usuario</span>
         </Link>
@@ -132,8 +114,8 @@ export default function UsersPage() {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {filteredUsers.map((user) => (
-              <tr 
-                key={user.id} 
+              <tr
+                key={user.id}
                 className="hover:bg-gray-50 cursor-pointer"
                 onClick={() => router.push(`/dashboard/users/${user.id}`)}
               >
@@ -185,7 +167,9 @@ export default function UsersPage() {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {new Date(user.companies[0]?.createdAt || "").toLocaleDateString()}
+                  {new Date(
+                    user.companies[0]?.createdAt || ""
+                  ).toLocaleDateString()}
                 </td>
               </tr>
             ))}
@@ -200,16 +184,16 @@ export default function UsersPage() {
 const mockCompanies: Company[] = [
   {
     id: "c1",
-    businessName: "Acueducto Municipal de Bogotá"
+    businessName: "Acueducto Municipal de Bogotá",
   },
   {
     id: "c2",
-    businessName: "Energía Regional del Valle"
+    businessName: "Energía Regional del Valle",
   },
   {
     id: "c3",
-    businessName: "Gas Natural del Caribe"
-  }
+    businessName: "Gas Natural del Caribe",
+  },
 ];
 
 // Mock data users actualizado con nombres de empresas
@@ -228,9 +212,9 @@ const mockUsers: User[] = [
         companyName: "Acueducto Municipal de Bogotá",
         role: "admin",
         createdAt: "2024-03-15T10:00:00Z",
-        updatedAt: "2024-03-15T10:00:00Z"
-      }
-    ]
+        updatedAt: "2024-03-15T10:00:00Z",
+      },
+    ],
   },
   {
     id: "2",
@@ -246,7 +230,7 @@ const mockUsers: User[] = [
         companyName: "Acueducto Municipal de Bogotá",
         role: "manager",
         createdAt: "2024-03-14T10:00:00Z",
-        updatedAt: "2024-03-14T10:00:00Z"
+        updatedAt: "2024-03-14T10:00:00Z",
       },
       {
         id: "cu4",
@@ -255,9 +239,9 @@ const mockUsers: User[] = [
         companyName: "Energía Regional del Valle",
         role: "operator",
         createdAt: "2024-03-14T10:00:00Z",
-        updatedAt: "2024-03-14T10:00:00Z"
-      }
-    ]
+        updatedAt: "2024-03-14T10:00:00Z",
+      },
+    ],
   },
   {
     id: "3",
@@ -273,8 +257,8 @@ const mockUsers: User[] = [
         companyName: "Gas Natural del Caribe",
         role: "operator",
         createdAt: "2024-03-13T10:00:00Z",
-        updatedAt: "2024-03-13T10:00:00Z"
-      }
-    ]
-  }
+        updatedAt: "2024-03-13T10:00:00Z",
+      },
+    ],
+  },
 ];

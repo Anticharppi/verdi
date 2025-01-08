@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useOnClickOutside } from "@/hooks/use-click-outside";
 import { cn } from "@/lib/utils";
+import toast from "react-hot-toast";
 
 const CompanySkeleton = () => (
   <div className="flex items-center justify-between w-full px-3 py-2 bg-white/5 rounded-lg">
@@ -36,6 +37,7 @@ export function CompanySelector() {
   const handleCompanySelect = (company: Company) => {
     setSelectedCompany(company);
     setIsOpen(false);
+    toast.success(`Empresa seleccionada: ${company.businessName}`);
   };
 
   if (isLoadingCompanies) {
