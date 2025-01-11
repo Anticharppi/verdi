@@ -12,8 +12,7 @@ interface ServiceAreaTableRowProps {
   id: string;
   stateName: string;
   cities: City[];
-  createdAt: string;
-  status: string;
+  createdAt: Date;
 }
 
 export function ServiceAreaTableRow({
@@ -21,12 +20,11 @@ export function ServiceAreaTableRow({
   stateName,
   cities,
   createdAt,
-  status,
 }: ServiceAreaTableRowProps) {
   const router = useRouter();
 
   return (
-    <tr 
+    <tr
       className="hover:bg-gray-50 cursor-pointer"
       onClick={() => router.push(`/dashboard/service-areas/${id}`)}
     >
@@ -37,7 +35,9 @@ export function ServiceAreaTableRow({
           </div>
           <div className="ml-4">
             <div className="text-sm font-medium text-gray-900">{stateName}</div>
-            <div className="text-sm text-gray-500">{cities.length} ciudades</div>
+            <div className="text-sm text-gray-500">
+              {cities.length} ciudades
+            </div>
           </div>
         </div>
       </td>
@@ -61,7 +61,7 @@ export function ServiceAreaTableRow({
         </span>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-        {new Date(createdAt).toLocaleDateString()}
+        {createdAt.toLocaleDateString()}
       </td>
     </tr>
   );

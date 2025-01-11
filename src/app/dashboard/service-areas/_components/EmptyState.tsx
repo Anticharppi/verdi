@@ -2,7 +2,7 @@
 
 import { MapPin } from "lucide-react";
 
-export function EmptyState() {
+export function NoServiceAreas() {
   return (
     <div className="text-center py-10 bg-white rounded-lg shadow">
       <MapPin className="mx-auto h-12 w-12 text-gray-400" />

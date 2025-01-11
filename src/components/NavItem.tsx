@@ -15,7 +15,6 @@ export function NavItem({
   icon,
   label,
   isActive = false,
-  isChild = false,
   isCollapsed = false,
 }: NavItemProps) {
   return (
@@ -23,12 +22,8 @@ export function NavItem({
       href={href}
       className={cn(
         "flex items-center gap-3 px-3 py-2 text-gray-300 rounded-lg transition-colors relative",
-        isActive ? "bg-white/10 text-white" : "hover:bg-white/10",
-        isChild && !isCollapsed && "ml-4",
-        isCollapsed && "justify-center",
-        isCollapsed &&
-          isActive &&
-          "after:absolute after:right-0 after:top-1/2 after:-translate-y-1/2 after:w-1 after:h-6 after:bg-blue-500 after:rounded-l"
+        isActive ? "bg-emerald-500 text-white" : "hover:bg-white/10",
+        isCollapsed && "justify-center"
       )}
     >
       <div className={cn("flex-shrink-0", isActive && "text-white")}>

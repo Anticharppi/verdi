@@ -1,13 +1,12 @@
 "use client";
 
-import { useCompany } from "@/contexts/CompanyContext";
 import { useCompanies } from "@/hooks/companies/use-companies";
-import { Company } from "@prisma/client";
-import { Building2, ChevronDown, Plus } from "lucide-react";
-import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
 import { useOnClickOutside } from "@/hooks/use-click-outside";
 import { cn } from "@/lib/utils";
+import { useSelectedCompanyStore } from "@/store/companies";
+import { Building2, ChevronDown, Plus } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 const CompanySkeleton = () => (
@@ -22,21 +21,42 @@ const CompanySkeleton = () => (
 
 export function CompanySelector() {
   const [isOpen, setIsOpen] = useState(false);
-  const { selectedCompany, setSelectedCompany } = useCompany();
+  const {
+    selectedCompany,
+    setSelectedCompany,
+    setCities,
+    setIsLoading,
+    setStates,
+  } = useSelectedCompanyStore();
   const { data: companies, isLoading: isLoadingCompanies } = useCompanies();
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useOnClickOutside(dropdownRef, () => setIsOpen(false));
 
   useEffect(() => {
     if (!selectedCompany && companies?.length) {
-      setSelectedCompany(companies[0]);
+      const { cities, ...company } = companies[0];
+      const states = Array.from(
+        new Map(cities.map((city) => [city.state.id, city.state])).values()
+      );
+      setStates(states);
+      setSelectedCompany(company);
+      setCities(cities);
+      setIsLoading(false);
     }
   }, [companies, selectedCompany, setSelectedCompany]);
 
-  const handleCompanySelect = (company: Company) => {
+  const handleCompanySelect = (id: string) => {
+    const { cities, ...company } = companies.find((c) => c.id === id);
     setSelectedCompany(company);
+    const states = Array.from(
+      new Map(cities.map((city) => [city.state.id, city.state])).values()
+    );
+    setStates(states);
+    setCities(cities);
     setIsOpen(false);
+    setIsLoading(false);
     toast.success(`Empresa seleccionada: ${company.businessName}`);
   };
 
@@ -94,7 +114,7 @@ export function CompanySelector() {
             {companies.map((company) => (
               <button
                 key={company.id}
-                onClick={() => handleCompanySelect(company)}
+                onClick={() => handleCompanySelect(company.id)}
                 className={cn(
                   "flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-300 hover:bg-blue-900/50 transition-colors",
                   selectedCompany?.id === company.id &&

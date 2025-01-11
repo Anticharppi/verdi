@@ -7,7 +7,19 @@ export class CompanyUsersRepository {
         userId,
       },
       include: {
-        company: true,
+        company: {
+          include: {
+            cities: {
+              include: {
+                city: {
+                  include: {
+                    state: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
   }

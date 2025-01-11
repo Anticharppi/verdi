@@ -1,5 +1,4 @@
 import { Sidebar } from "@/components/Sidebar";
-import { CompanyProvider } from "@/contexts/CompanyContext";
 import { SessionProvider } from "@/contexts/SessionContext";
 import { getUserInSession } from "@/lib/actions/users";
 import { redirect } from "next/navigation";
@@ -11,15 +10,11 @@ type Props = {
 
 export default async function DashboardLayout({ children }: Props) {
   const user = await getUserInSession();
-
   if (!user) return redirect("/welcome");
-
   return (
     <SessionProvider>
-      <CompanyProvider>
-        <Sidebar>{children}</Sidebar>
-        <Toaster position="top-right" />
-      </CompanyProvider>
+      <Sidebar>{children}</Sidebar>
+      <Toaster position="top-right" />
     </SessionProvider>
   );
 }

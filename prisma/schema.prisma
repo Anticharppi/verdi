@@ -80,6 +80,8 @@ model Nueca {
   companyCityId             String                      @map("company_city_id")
   nuapId                    String                      @map("nuap_id")
   price                     Float
+  createdAt                 DateTime                    @default(now()) @map("created_at")
+  updatedAt                 DateTime                    @updatedAt @map("updated_at")
   nuap                      Nuap                        @relation(fields: [nuapId], references: [id])
   companyCity               CompanyCity                 @relation(fields: [companyCityId], references: [id])
   company                   Company                     @relation(fields: [companyId], references: [id])
@@ -97,6 +99,8 @@ model Nuap {
   code          String
   companyId     String      @map("company_id")
   companyCityId String      @map("company_city_id")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
   company       Company     @relation(fields: [companyId], references: [id])
   companyCity   CompanyCity @relation(fields: [companyCityId], references: [id])
   nuecas        Nueca[]

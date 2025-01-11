@@ -73,9 +73,4 @@ export const SETTINGS_NAVIGATION: NavigationItem[] = [
     href: "/dashboard/companies",
     icon: <Building className="w-5 h-5" />,
   },
-  {
-    label: "Usuarios",
-    href: "/dashboard/users",
-    icon: <Users className="w-5 h-5" />,
-  },
 ];

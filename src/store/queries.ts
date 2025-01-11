@@ -15,4 +15,7 @@ export const queryKeys = {
   auth: {
     welcome: ["auth", "welcome"] as const,
   },
+  serviceAreas: {
+    all: ["serviceAreas"] as const,
+  },
 };

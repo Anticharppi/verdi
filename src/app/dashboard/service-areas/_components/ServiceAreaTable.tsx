@@ -1,30 +1,22 @@
 "use client";
 
 import { ServiceAreaTableRow } from "./ServiceAreaTableRow";
-import { EmptyState } from "./EmptyState";
+import { useServiceAreas } from "@/hooks/service-areas";
+import ServiceAreaTableSkeleton from "./ServiceAreaTableSkeleton";
+import { NoServiceAreas } from "./EmptyState";
+import { useSelectedCompanyStore } from "@/store/companies";
 
-interface City {
-  code: string;
-  name: string;
-}
+export function ServiceAreaTable() {
+  const { selectedCompany } = useSelectedCompanyStore();
+  const { data, isLoading: isLoadingServiceAreas } = useServiceAreas(
+    selectedCompany?.id
+  );
 
-interface ServiceArea {
-  id: string;
-  stateCode: string;
-  stateName: string;
-  cities: City[];
-  createdAt: string;
-  status: string;
-}
+  if (!data) return null;
 
-interface ServiceAreaTableProps {
-  areas: ServiceArea[];
-}
+  if (isLoadingServiceAreas) return <ServiceAreaTableSkeleton />;
 
-export function ServiceAreaTable({ areas }: ServiceAreaTableProps) {
-  if (areas.length === 0) {
-    return <EmptyState />;
-  }
+  if (!data.length) return <NoServiceAreas />;
 
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -46,14 +38,13 @@ export function ServiceAreaTable({ areas }: ServiceAreaTableProps) {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {areas.map((area) => (
+          {data.map((sa) => (
             <ServiceAreaTableRow
-              key={area.id}
-              id={area.id}
-              stateName={area.stateName}
-              cities={area.cities}
-              createdAt={area.createdAt}
-              status={area.status}
+              key={sa.id}
+              id={sa.id}
+              stateName={sa.companyCity.city.state.name}
+              cities={sa.nuecas.map((nueca) => nueca.companyCity.city)}
+              createdAt={sa.createdAt}
             />
           ))}
         </tbody>
