@@ -1,8 +1,8 @@
 "use client";
 
+import { ServiceAreaTable } from "@/components/service-areas/ServiceAreaTable";
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { ServiceAreaTable } from "./_components/ServiceAreaTable";
 
 export default function ServiceAreasPage() {
   return (

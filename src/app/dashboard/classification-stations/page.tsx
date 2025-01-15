@@ -1,6 +1,5 @@
 "use client";
 
-import { useCompany } from "@/contexts/CompanyContext";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -8,6 +7,7 @@ import { Header } from "../../../components/clasification-stations/Header";
 import { SearchBar } from "../../../components/clasification-stations/SearchBar";
 import { StationTable } from "../../../components/clasification-stations/StationTable";
 import type { Station } from "../../../components/clasification-stations/types";
+import { useSelectedCompanyStore } from "@/store/companies";
 
 const mockStations: Station[] = [
   {
@@ -77,7 +77,7 @@ const mockStations: Station[] = [
 ];
 
 export default function ClassificationStations() {
-  const { selectedCompany } = useCompany();
+  const { selectedCompany } = useSelectedCompanyStore();
   const [searchQuery, setSearchQuery] = useState("");
 
   if (!selectedCompany) {
@@ -99,9 +99,7 @@ export default function ClassificationStations() {
 
   return (
     <div className="h-full">
-      <Header
-        companyName={selectedCompany.name || selectedCompany.businessName}
-      />
+      <Header companyName={selectedCompany?.businessName} />
 
       <div className="flex items-center justify-between mb-6">
         <SearchBar

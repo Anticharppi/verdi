@@ -7,6 +7,7 @@ import { useSelectedCompanyStore } from "@/store/companies";
 import { Building2, ChevronDown, Plus } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 const CompanySkeleton = () => (
@@ -29,13 +30,31 @@ export function CompanySelector() {
     setStates,
   } = useSelectedCompanyStore();
   const { data: companies, isLoading: isLoadingCompanies } = useCompanies();
-
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useOnClickOutside(dropdownRef, () => setIsOpen(false));
 
   useEffect(() => {
-    if (!selectedCompany && companies?.length) {
+    if (!companies?.length) return;
+
+    const urlCompanyId = searchParams.get("cid");
+    const currentCompanyId = selectedCompany?.id;
+
+    if (urlCompanyId && urlCompanyId !== currentCompanyId) {
+      const companyFromUrl = companies.find((c) => c.id === urlCompanyId);
+      if (companyFromUrl) {
+        const { cities, ...company } = companyFromUrl;
+        const states = Array.from(
+          new Map(cities.map((city) => [city.state.id, city.state])).values()
+        );
+        setStates(states);
+        setSelectedCompany(company);
+        setCities(cities);
+        setIsLoading(false);
+      }
+    } else if (!urlCompanyId && !currentCompanyId) {
       const { cities, ...company } = companies[0];
       const states = Array.from(
         new Map(cities.map((city) => [city.state.id, city.state])).values()
@@ -44,8 +63,11 @@ export function CompanySelector() {
       setSelectedCompany(company);
       setCities(cities);
       setIsLoading(false);
+      const currentParams = new URLSearchParams(searchParams.toString());
+      currentParams.set("cid", company.id);
+      router.replace(`?${currentParams.toString()}`);
     }
-  }, [companies, selectedCompany, setSelectedCompany]);
+  }, [companies, searchParams]);
 
   const handleCompanySelect = (id: string) => {
     const { cities, ...company } = companies.find((c) => c.id === id);
@@ -57,6 +79,11 @@ export function CompanySelector() {
     setCities(cities);
     setIsOpen(false);
     setIsLoading(false);
+
+    const currentParams = new URLSearchParams(searchParams.toString());
+    currentParams.set("cid", id);
+    router.replace(`?${currentParams.toString()}`);
+
     toast.success(`Empresa seleccionada: ${company.businessName}`);
   };
 
@@ -67,7 +94,7 @@ export function CompanySelector() {
   if (!companies?.length) {
     return (
       <Link
-        href="/dashboard/companies/create"
+        href={`/dashboard/companies/create?cid=${selectedCompany?.id}`}
         className="flex items-center justify-between w-full px-3 py-2 text-gray-300 bg-gradient-to-r from-blue-900/50 to-blue-800/50 hover:from-blue-900/70 hover:to-blue-800/70 rounded-lg transition-all duration-200 group"
       >
         <div className="flex items-center gap-2">
@@ -126,7 +153,7 @@ export function CompanySelector() {
               </button>
             ))}
             <Link
-              href="/dashboard/companies/create"
+              href={`/dashboard/companies/create?cid=${selectedCompany?.id}`}
               className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-300 hover:bg-blue-900/50 transition-colors border-t border-white/10"
             >
               <Plus className="w-5 h-5 flex-shrink-0" />

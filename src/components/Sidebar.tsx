@@ -15,6 +15,7 @@ import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs";
 import { Tooltip } from "@/components/Tooltip";
 import { MAIN_NAVIGATION, SETTINGS_NAVIGATION } from "@/constants/routes";
 import { useSidebar } from "@/hooks";
+import { useSelectedCompanyStore } from "@/store/companies";
 
 type Props = {
   children: React.ReactNode;
@@ -23,6 +24,8 @@ type Props = {
 export function Sidebar({ children }: Props) {
   const { isCollapsed, isMobile, user, toggleSidebar, isRouteActive } =
     useSidebar();
+
+  const { selectedCompany } = useSelectedCompanyStore();
 
   if (!user) {
     return null;
@@ -61,7 +64,6 @@ export function Sidebar({ children }: Props) {
             </button>
           </div>
 
-          {/* Main Content */}
           <div className="flex-1 flex flex-col min-h-0">
             {!isCollapsed && (
               <div className="p-4 border-b border-white/10">
@@ -78,7 +80,7 @@ export function Sidebar({ children }: Props) {
                     side="right"
                   >
                     <NavItem
-                      href={item.href}
+                      href={`${item.href}?cid=${selectedCompany?.id}`}
                       icon={item.icon}
                       label={item.label}
                       isActive={isRouteActive(item.href)}
@@ -89,11 +91,10 @@ export function Sidebar({ children }: Props) {
               </nav>
             </div>
 
-            {/* Settings Section */}
             <div className="p-3 border-t border-white/10">
               {SETTINGS_NAVIGATION.map((item) => (
                 <NavItem
-                  href={item.href}
+                  href={`${item.href}?cid=${selectedCompany?.id}`}
                   key={item.href}
                   icon={item.icon}
                   label={item.label}
@@ -105,7 +106,6 @@ export function Sidebar({ children }: Props) {
             </div>
           </div>
 
-          {/* Footer */}
           <div className="p-3 border-t border-white/10">
             <Tooltip
               content={isCollapsed ? user.email || "" : undefined}
@@ -145,7 +145,6 @@ export function Sidebar({ children }: Props) {
         </div>
       </aside>
 
-      {/* Main Content Wrapper */}
       <div
         className={cn(
           "min-h-screen bg-zinc-50",

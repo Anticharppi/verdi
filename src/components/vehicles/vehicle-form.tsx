@@ -16,7 +16,7 @@ import { VehicleDeleteAlert } from "./table/vehicle-delete-alert";
 export function VehicleForm({ initialData }: VehicleFormProps) {
   const router = useRouter();
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-  
+
   const {
     formData,
     errors,
@@ -24,41 +24,35 @@ export function VehicleForm({ initialData }: VehicleFormProps) {
     isEditing,
     handleChange,
     onSubmit,
-    handleDelete
+    handleDelete,
   } = useVehicleForm(initialData);
 
   return (
     <div className="max-w-4xl mx-auto">
-      <FormHeader 
-        onBack={() => router.push("/dashboard/vehicles")} 
-      />
+      <FormHeader onBack={() => router.push("/dashboard/vehicles")} />
 
       <form onSubmit={onSubmit} className="space-y-6">
         <BasicInfoSection
           formData={formData}
           loading={loading}
-          errors={errors}
           onChange={handleChange}
         />
 
         <TechnicalInfoSection
           formData={formData}
           loading={loading}
-          errors={errors}
           onChange={handleChange}
         />
 
         <DatesSection
           formData={formData}
           loading={loading}
-          errors={errors}
           onChange={handleChange}
         />
 
         <ProviderSection
           formData={formData}
           loading={loading}
-          errors={errors}
           onChange={handleChange}
         />
 
@@ -80,12 +74,16 @@ export function VehicleForm({ initialData }: VehicleFormProps) {
             disabled={loading}
             className="bg-emerald-500 hover:bg-emerald-600"
           >
-            {loading ? "Guardando..." : isEditing ? "Guardar Cambios" : "Crear Vehículo"}
+            {loading
+              ? "Guardando..."
+              : isEditing
+              ? "Guardar Cambios"
+              : "Crear Vehículo"}
           </Button>
         </div>
       </form>
 
-      <VehicleDeleteAlert 
+      <VehicleDeleteAlert
         open={showDeleteAlert}
         loading={loading}
         onClose={() => setShowDeleteAlert(false)}

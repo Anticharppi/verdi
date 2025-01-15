@@ -1,3 +1,4 @@
+"use client";
 import React, { FC, PropsWithChildren } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
@@ -7,6 +8,7 @@ const WithSelectedCompany: FC<PropsWithChildren> = ({ children }) => {
   const {
     selectedCompany,
     cities,
+    states,
     isLoading: isLoadingSelectedCompany,
   } = useSelectedCompanyStore();
 
@@ -18,7 +20,7 @@ const WithSelectedCompany: FC<PropsWithChildren> = ({ children }) => {
     );
   }
 
-  if (!selectedCompany || !cities?.length) {
+  if (!selectedCompany || !cities?.length || !states?.length) {
     return (
       <div className="flex items-center justify-center w-full h-32">
         <Badge variant="secondary" className="text-sm">

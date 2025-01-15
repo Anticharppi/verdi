@@ -102,9 +102,10 @@ export class CompaniesRepository {
         id,
       },
       include: {
+        users: true,
         cities: {
-          select: {
-            cityId: true,
+          include: {
+            city: true,
           },
         },
       },
