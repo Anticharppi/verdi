@@ -64,6 +64,25 @@
     --input: 240 3.7% 15.9%;
     --ring: 160 84% 39%;
   }
+
+  /* Estilos para la barra de desplazamiento */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #9ca3af;  /* Color gris (gray-400 de Tailwind) */
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;  /* Color gris más oscuro (gray-500 de Tailwind) */
+  }
 }
 
 @layer base {

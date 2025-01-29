@@ -1,18 +1,5 @@
-"use client";
-
-import { StationTableRow } from "./StationTableRow";
-import { EmptyState } from "./EmptyState";
-import { Station } from "./types";
-
-interface StationTableProps {
-  stations: Station[];
-}
-
-export function StationTable({ stations }: StationTableProps) {
-  if (stations.length === 0) {
-    return <EmptyState />;
-  }
-
+export const ClasificationStationsTableSkeleton = () => {
+  const skeletonRows = Array.from({ length: 5 });
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
       <table className="min-w-full divide-y divide-gray-200">
@@ -39,11 +26,30 @@ export function StationTable({ stations }: StationTableProps) {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {stations.map((station) => (
-            <StationTableRow key={station.id} {...station} />
+          {skeletonRows.map((_, index) => (
+            <tr key={index}>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="h-4 bg-gray-200 rounded animate-pulse w-24"></div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="h-4 bg-gray-200 rounded animate-pulse w-16"></div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="h-4 bg-gray-200 rounded animate-pulse w-32"></div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="h-4 bg-gray-200 rounded animate-pulse w-28"></div>
+              </td>
+            </tr>
           ))}
         </tbody>
       </table>
     </div>
   );
-}
+};

@@ -18,4 +18,8 @@ export const queryKeys = {
   serviceAreas: {
     all: ["serviceAreas"] as const,
   },
+  clasificationStations: {
+    byCompanyId: (companyId: string) =>
+      ["clasificationStations", { companyId }] as const,
+  },
 };

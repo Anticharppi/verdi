@@ -2,12 +2,14 @@
 
 import { Plus } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Header } from "../../../components/clasification-stations/Header";
 import { SearchBar } from "../../../components/clasification-stations/SearchBar";
-import { StationTable } from "../../../components/clasification-stations/StationTable";
+import { ClasificationStationsTable } from "../../../components/clasification-stations/ClasificationStationsTable";
 import type { Station } from "../../../components/clasification-stations/types";
 import { useSelectedCompanyStore } from "@/store/companies";
+import { useClasificationStations } from "@/hooks/clasification-stations";
+import { ClasificationStationsTableSkeleton } from "@/components/clasification-stations/ClasificationStationsTableSkeleton";
 
 const mockStations: Station[] = [
   {
@@ -79,6 +81,7 @@ const mockStations: Station[] = [
 export default function ClassificationStations() {
   const { selectedCompany } = useSelectedCompanyStore();
   const [searchQuery, setSearchQuery] = useState("");
+  const { data, isLoading } = useClasificationStations(selectedCompany?.id);
 
   if (!selectedCompany) {
     return (
@@ -96,6 +99,10 @@ export default function ClassificationStations() {
         material.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
   );
+
+  if (isLoading) {
+    return <ClasificationStationsTableSkeleton />;
+  }
 
   return (
     <div className="h-full">
@@ -117,7 +124,7 @@ export default function ClassificationStations() {
         </Link>
       </div>
 
-      <StationTable stations={filteredStations} />
+      <ClasificationStationsTable stations={[]} />
     </div>
   );
 }
