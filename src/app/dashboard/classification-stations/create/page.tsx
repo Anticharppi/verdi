@@ -1,16 +1,8 @@
 "use client";
 
-import { StationForm } from "../../../../components/clasification-stations/forms/station-form";
+import { ClasificationStationForm } from "../../../../components/clasification-stations/forms/ClasificationStationForm";
 
 export default function CreateStationPage() {
-  const initialData = {
-    code: "",
-    price: 0,
-    materials: [],
-    cityId: "",
-    nuapId: "",
-  };
-
   return (
     <div className="h-full">
       <div className="mb-8">
@@ -22,7 +14,7 @@ export default function CreateStationPage() {
         </p>
       </div>
 
-      <StationForm initialData={initialData} isNew={true} />
+      <ClasificationStationForm />
     </div>
   );
 }

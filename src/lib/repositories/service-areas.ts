@@ -35,6 +35,14 @@ export class ServiceAreasRepository {
     });
   }
 
+  static async findAllByCompanyCityId(companyCityId: string) {
+    return await db.nuap.findMany({
+      where: {
+        companyCityId,
+      },
+    });
+  }
+
   static async create(input: Prisma.NuapUncheckedCreateInput) {
     return await db.nuap.create({
       data: input,

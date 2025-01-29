@@ -17,6 +17,8 @@ export const queryKeys = {
   },
   serviceAreas: {
     all: ["serviceAreas"] as const,
+    byCompanyCityId: (companyCityId: string) =>
+      ["serviceAreas", { companyCityId }] as const,
   },
   clasificationStations: {
     byCompanyId: (companyId: string) =>

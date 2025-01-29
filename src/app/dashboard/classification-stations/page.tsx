@@ -6,77 +6,9 @@ import { useEffect, useState } from "react";
 import { Header } from "../../../components/clasification-stations/Header";
 import { SearchBar } from "../../../components/clasification-stations/SearchBar";
 import { ClasificationStationsTable } from "../../../components/clasification-stations/ClasificationStationsTable";
-import type { Station } from "../../../components/clasification-stations/types";
 import { useSelectedCompanyStore } from "@/store/companies";
 import { useClasificationStations } from "@/hooks/clasification-stations";
 import { ClasificationStationsTableSkeleton } from "@/components/clasification-stations/ClasificationStationsTableSkeleton";
-
-const mockStations: Station[] = [
-  {
-    id: "1",
-    code: "NUECA-001",
-    price: 1500000,
-    city: {
-      id: "CTG",
-      name: "Cartagena",
-      state: {
-        code: "BOL",
-        name: "Bolívar",
-      },
-    },
-    nuap: {
-      id: "NUAP-001",
-      code: "NUAP-BOL-001",
-    },
-    materials: [
-      { id: "1", name: "Cartón", code: "CAR", price: 1000 },
-      { id: "2", name: "Plástico", code: "PLA", price: 1500 },
-    ],
-    weighingMachines: [
-      {
-        id: "1",
-        weightCapacity: 1000,
-        installationDate: "2024-01-15",
-        lastCalibrationDate: "2024-03-01",
-      },
-    ],
-    status: "active",
-    createdAt: "2024-01-01T10:00:00Z",
-  },
-  {
-    id: "2",
-    code: "NUECA-002",
-    price: 2000000,
-    city: {
-      id: "MED",
-      name: "Medellín",
-      state: {
-        code: "ANT",
-        name: "Antioquia",
-      },
-    },
-    nuap: {
-      id: "NUAP-002",
-      code: "NUAP-ANT-001",
-    },
-    materials: [
-      { id: "1", name: "Cartón", code: "CAR", price: 1000 },
-      { id: "2", name: "Plástico", code: "PLA", price: 1500 },
-      { id: "3", name: "Vidrio", code: "VID", price: 800 },
-      { id: "4", name: "Metal", code: "MET", price: 2000 },
-    ],
-    weighingMachines: [
-      {
-        id: "2",
-        weightCapacity: 2000,
-        installationDate: "2024-02-15",
-        lastCalibrationDate: "2024-03-15",
-      },
-    ],
-    status: "active",
-    createdAt: "2024-02-01T10:00:00Z",
-  },
-];
 
 export default function ClassificationStations() {
   const { selectedCompany } = useSelectedCompanyStore();
@@ -90,15 +22,6 @@ export default function ClassificationStations() {
       </div>
     );
   }
-
-  const filteredStations = mockStations.filter(
-    (station) =>
-      station.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      station.city.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      station.materials.some((material) =>
-        material.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-  );
 
   if (isLoading) {
     return <ClasificationStationsTableSkeleton />;

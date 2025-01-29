@@ -9,7 +9,10 @@ export async function getCompaniesAction() {
   const response = companies.map(({ company }) => {
     return {
       ...company,
-      cities: company.cities.map(({ city }) => city),
+      cities: company.cities.map(({ id, city }) => ({
+        companyCityId: id,
+        ...city,
+      })),
     };
   });
   return response;

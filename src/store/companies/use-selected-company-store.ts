@@ -1,5 +1,9 @@
-import { City, Company, State } from "@prisma/client";
+import { City as _, Company, State } from "@prisma/client";
 import { create } from "zustand";
+
+interface City extends _ {
+  companyCityId: string;
+}
 
 interface SelectedCompanyStoreState {
   isLoading: boolean;
